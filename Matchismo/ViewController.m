@@ -104,6 +104,12 @@
                               //reset score label
                               self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
                               
+                              //reset game history
+                              self.gameHistory = nil;
+                              
+                              [self.gameHistorySlider setMaximumValue:0.0f];
+                              [self.gameHistorySlider setValue:0.0f];
+                              
                           }
                  
                       }];
@@ -124,6 +130,9 @@
 
 - (IBAction)touchCardButton:(UIButton *)sender {
 
+    //
+    [self updateUI];
+    
     [[self cardMatchModeSegControl] setEnabled:NO];
     
     NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
@@ -197,15 +206,11 @@
 //}
 
 - (IBAction)viewGameHistory:(id)sender {
-    float value = [(UISlider*)sender value];
-    NSLog(@" ");
-    NSLog(@"index: %f",value);
-    NSLog(@"chosen: %@",self.gameHistory[(int)value][CHOSEN_CARD_KEY]);
-    NSLog(@"status: %@",self.gameHistory[(int)value][STATUS_KEY]);
-    for (NSNumber *num in self.gameHistory[(int)value][MATCHED_CARDS_KEY]){
-        NSLog(@"matched: %@",num);
+    if ([self.gameHistory count] == 0){
+        return;
     }
     
+    float value = [(UISlider*)sender value];
     [self updateUIWithHistory:(NSDictionary*)self.gameHistory[(int)value]];
     
     
