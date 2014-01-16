@@ -19,6 +19,12 @@
 #define TWO_CARD_MATCH_MODE_INDEX 0
 #define THREE_CARD_MATCH_MODE_INDEX 1
 
+#define CHOSEN_CARD_KEY @"chosenCard"
+#define MATCHED_CARDS_KEY @"matchedCards"
+#define STATUS_KEY @"status"
+#define SCORE_KEY @"score"
+
+
 @interface ViewController ()
 //@property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 //@property (nonatomic) int flipCount;
@@ -31,6 +37,12 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
+@property (strong,nonatomic) NSMutableArray *gameHistory;
+@property (strong,nonatomic) NSMutableSet *indexOfMatchedCards;
+@property (weak, nonatomic) IBOutlet UISlider *gameHistorySlider;
+
+-(void) updateUI;
+-(void) updateMatchStatusType;
 
 @end
 
@@ -49,6 +61,11 @@
                                                object:nil];
 }
 
+-(void) viewDidDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:MatchStatusTypeChangedNotification
+                                                  object:nil];
+}
 
 -(CardMatchingGame *)game{
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[[self cardButtons] count] usingDeck:[self createDeck]];
@@ -58,6 +75,18 @@
 -(Deck *)createDeck{
     return [[PlayingCardDeck alloc] init];
 }
+
+-(NSMutableSet *) indexOfMatchedCards{
+    if (!_indexOfMatchedCards) _indexOfMatchedCards = [[NSMutableSet alloc] init];
+    return _indexOfMatchedCards;
+}
+
+-(NSMutableArray *) gameHistory{
+    if (!_gameHistory) _gameHistory = [[NSMutableArray alloc] init];
+    return _gameHistory;
+}
+
+
 - (IBAction)startNewGame {
 
     [UIAlertView showWithTitle:@"Reset Game"
@@ -95,27 +124,19 @@
 
 - (IBAction)touchCardButton:(UIButton *)sender {
 
-//    if ([[sender currentTitle] length]){
-//        [sender setBackgroundImage:[UIImage imageNamed:@"cardBack"] forState:UIControlStateNormal];
-//        [sender setTitle:@"" forState:UIControlStateNormal];
-//    }else{
-//        Card *randomCard = [[self deck] drawRandomCard];
-//        if (randomCard){
-//            [sender setBackgroundImage:[UIImage imageNamed:@"cardFront"] forState:UIControlStateNormal];
-//            [sender setTitle:[randomCard contents] forState:UIControlStateNormal];
-//        }
-//    }
-//    self.flipCount ++;
-    //enable segmented control
     [[self cardMatchModeSegControl] setEnabled:NO];
     
     NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    [sender setTitle:[[self.game cardAtIndex:chosenButtonIndex] contents] forState:UIControlStateNormal];
+    //[sender setTitle:[[self.game cardAtIndex:chosenButtonIndex] contents] forState:UIControlStateNormal];
     [self updateUI];
     
+    //update game history
+    [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text, SCORE_KEY:@(self.game.score)}];
+    [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
+    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
+    
 }
-
 
 -(void) updateUI{
     for (UIButton *cardButton in self.cardButtons){
@@ -125,6 +146,11 @@
         [cardButton setTitle:title forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
+        
+        //add current index to array of matched cards index
+        if (card.isMatched){
+            [self.indexOfMatchedCards addObject:@(cardButtonIndex)];
+        }
     }
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
@@ -133,8 +159,17 @@
     
 }
 
--(void) updateMatchStatusType{
+-(NSString *) titleForCard:(Card *)card{
+    NSString *title = card.isChosen ? card.contents : @"";
+    return title;
+}
 
+-(UIImage *) backgroundImageForCard:(Card *)card{
+    return [UIImage imageNamed:card.isChosen ? @"cardFront" : @"cardBack"];
+}
+
+-(void) updateMatchStatusType{
+    
     switch (self.game.matchStatus) {
         case MatchStatusTypeNoCardSelected:
             self.statusLabel.text = @"";
@@ -156,24 +191,50 @@
     }
 }
 
--(NSString *) titleForCard:(Card *)card{
-    NSString *title = card.isChosen ? card.contents : @"";
-    return title;
-}
-
--(UIImage *) backgroundImageForCard:(Card *)card{
-    return [UIImage imageNamed:card.isChosen ? @"cardFront" : @"cardBack"];
-}
-
 //-(void)setFlipCount:(int)flipCount{
 //    _flipCount = flipCount;
 //    [[self flipsLabel] setText:[NSString stringWithFormat:@"Flips:%i",_flipCount]];
 //}
 
--(void) dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:MatchStatusTypeChangedNotification
-                                                  object:nil];
+- (IBAction)viewGameHistory:(id)sender {
+    float value = [(UISlider*)sender value];
+    NSLog(@" ");
+    NSLog(@"index: %f",value);
+    NSLog(@"chosen: %@",self.gameHistory[(int)value][CHOSEN_CARD_KEY]);
+    NSLog(@"status: %@",self.gameHistory[(int)value][STATUS_KEY]);
+    for (NSNumber *num in self.gameHistory[(int)value][MATCHED_CARDS_KEY]){
+        NSLog(@"matched: %@",num);
+    }
+    
+    [self updateUIWithHistory:(NSDictionary*)self.gameHistory[(int)value]];
+    
+    
+}
+
+-(void) updateUIWithHistory:(NSDictionary*) historyData{
+    //set matched cards, reset other cards
+    for (UIButton *cardButton in self.cardButtons){
+        NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        if ([(NSArray*)historyData[MATCHED_CARDS_KEY] containsObject:@(cardButtonIndex)]){
+            [cardButton setTitle:[self.game cardAtIndex:cardButtonIndex].contents forState:UIControlStateNormal];
+            [cardButton setBackgroundImage:[UIImage imageNamed:@"cardFront"] forState:UIControlStateNormal];
+            cardButton.enabled = NO;
+        }else{
+            [cardButton setBackgroundImage:[UIImage imageNamed:@"cardBack"] forState:UIControlStateNormal];
+            [cardButton setTitle:@"" forState:UIControlStateNormal];
+            cardButton.enabled = YES;
+        }
+    }
+    
+    //set chosen cards
+    UIButton *cardButton = self.cardButtons[[(NSNumber*)historyData[CHOSEN_CARD_KEY] integerValue]];
+    [cardButton setTitle:[self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]].contents forState:UIControlStateNormal];
+    [cardButton setBackgroundImage:[UIImage imageNamed:@"cardFront"] forState:UIControlStateNormal];
+    cardButton.enabled = YES;
+    
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",[(NSNumber*)historyData[SCORE_KEY] integerValue]];
+    self.statusLabel.text = historyData[STATUS_KEY];
+    
 }
 
 @end

@@ -75,15 +75,18 @@ static const int COST_TO_CHOOSE = 1;
         return;
     }
     self.currentCard = card;
-    
+
     self.matchStatus = MatchStatusTypeNotEnoughMoves;
     [[NSNotificationCenter defaultCenter] postNotificationName:MatchStatusTypeChangedNotification object:nil];
     
+    //there are still not enough cards to determine a match
     if ([[self chosenCards] count] < self.numberOfCardsMatchMode-1){
         card.chosen = YES;
         [[self chosenCards] addObject:card];
         self.score -= COST_TO_CHOOSE;
-    }else {
+    }
+    else {
+        //check if the existing cards in the array match the current card
         self.matchScore = [card match:self.chosenCards];
         
         //for 3 card match mode, check for the match between the 1st and 2nd cards
@@ -94,19 +97,28 @@ static const int COST_TO_CHOOSE = 1;
         if (self.matchScore){
             self.matchScore *=(self.numberOfCardsMatchMode == 2 ? 4:2);
             self.score += self.matchScore ;
+            
+            //set all cards to be matched
             for (Card *card in [self chosenCards]){
                 card.matched = YES;
             }
             card.matched = YES;
+            
+            //clean up array of chosen cards
             self.chosenCards = nil;
             
             self.matchStatus = MatchStatusTypeMatchFound;
         }else{
             self.score -= MISMATCH_PENALTY;
+            
+            //set all previous/other cards to not chosen
             for (Card *card in [self chosenCards]){
                 card.chosen = NO;
             }
+            
+            //clean up array of chosen cards
             self.chosenCards = nil;
+            //add current object to the chosen cards array (since it is still chosen)
             [self.chosenCards addObject:card];
             
             self.matchStatus = MatchStatusTypeMatchNotFound;
