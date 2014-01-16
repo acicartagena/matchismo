@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5428F3CF1887896D00BBFE8F /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 5428F3CE1887896D00BBFE8F /* UIAlertView+Blocks.m */; };
 		5439FF2A18861D96006CC0A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5439FF2918861D96006CC0A7 /* Foundation.framework */; };
 		5439FF2C18861D96006CC0A7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5439FF2B18861D96006CC0A7 /* CoreGraphics.framework */; };
 		5439FF2E18861D96006CC0A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5439FF2D18861D96006CC0A7 /* UIKit.framework */; };
@@ -39,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5428F3CD1887896D00BBFE8F /* UIAlertView+Blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+Blocks.h"; path = "UIAlertView+Blocks/UIAlertView+Blocks.h"; sourceTree = SOURCE_ROOT; };
+		5428F3CE1887896D00BBFE8F /* UIAlertView+Blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+Blocks.m"; path = "UIAlertView+Blocks/UIAlertView+Blocks.m"; sourceTree = SOURCE_ROOT; };
 		5439FF2618861D96006CC0A7 /* Matchismo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchismo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5439FF2918861D96006CC0A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5439FF2B18861D96006CC0A7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -94,6 +97,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5428F3CB188788FB00BBFE8F /* 3rdParty Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5428F3CC1887895C00BBFE8F /* UIAlertView+Blocks */,
+			);
+			name = "3rdParty Frameworks";
+			sourceTree = "<group>";
+		};
+		5428F3CC1887895C00BBFE8F /* UIAlertView+Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				5428F3CD1887896D00BBFE8F /* UIAlertView+Blocks.h */,
+				5428F3CE1887896D00BBFE8F /* UIAlertView+Blocks.m */,
+			);
+			name = "UIAlertView+Blocks";
+			sourceTree = "<group>";
+		};
 		5439FF1D18861D96006CC0A7 = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +147,7 @@
 		5439FF2F18861D96006CC0A7 /* Matchismo */ = {
 			isa = PBXGroup;
 			children = (
+				5428F3CB188788FB00BBFE8F /* 3rdParty Frameworks */,
 				547838AB188633F100780AF6 /* Model */,
 				5439FF3B18861D96006CC0A7 /* Main.storyboard */,
 				5439FF3E18861D96006CC0A7 /* ViewController.h */,
@@ -285,6 +306,7 @@
 				5439FF66188621A5006CC0A7 /* PlayingCard.m in Sources */,
 				5439FF6318861F1A006CC0A7 /* Deck.m in Sources */,
 				5439FF4018861D96006CC0A7 /* ViewController.m in Sources */,
+				5428F3CF1887896D00BBFE8F /* UIAlertView+Blocks.m in Sources */,
 				5439FF3A18861D96006CC0A7 /* AppDelegate.m in Sources */,
 				547838AE1886385500780AF6 /* CardMatchingGame.m in Sources */,
 				5439FF69188628D6006CC0A7 /* PlayingCardDeck.m in Sources */,

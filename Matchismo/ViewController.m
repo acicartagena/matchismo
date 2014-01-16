@@ -38,6 +38,17 @@
 -(Deck *)createDeck{
     return [[PlayingCardDeck alloc] init];
 }
+- (IBAction)startNewGame {
+    //delete previous game
+    _game = nil;
+    
+    //reset score
+    
+}
+
+-(void) resetGame{
+    
+}
 
 - (IBAction)touchCardButton:(UIButton *)sender {
 
@@ -53,7 +64,7 @@
 //    }
 //    self.flipCount ++;
     
-    int chosenButtonIndex = [self.cardButtons indexOfObject:sender];
+    NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
     [sender setTitle:[[self.game cardAtIndex:chosenButtonIndex] contents] forState:UIControlStateNormal];
     [self updateUI];
@@ -62,14 +73,14 @@
 
 -(void) updateUI{
     for (UIButton *cardButton in self.cardButtons){
-        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];
         NSString *title = [self titleForCard:card];
         [cardButton setTitle:title forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
     }
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
     
 }
 
