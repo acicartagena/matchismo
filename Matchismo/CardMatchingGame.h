@@ -30,6 +30,7 @@
 @property (nonatomic,weak) Card *currentCard;
 
 typedef enum MatchStatusTypes{
+    MatchStatusTypePreviouslyMatched,
     MatchStatusTypeNoCardSelected,
     MatchStatusTypeNotEnoughMoves,
     MatchStatusTypeMatchFound,

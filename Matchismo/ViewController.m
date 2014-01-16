@@ -41,18 +41,14 @@
 @property (strong,nonatomic) NSMutableSet *indexOfMatchedCards;
 @property (weak, nonatomic) IBOutlet UISlider *gameHistorySlider;
 
+@property (nonatomic) BOOL browseHistory;
+
 -(void) updateUI;
 -(void) updateMatchStatusType;
 
 @end
 
 @implementation ViewController
-
-//-(Deck *) deck{
-//    //if (!_deck) _deck = [[PlayingCardDeck alloc] init];
-//    if (!_deck) _deck = [self createDeck];
-//    return _deck;
-//}
 
 -(void) viewDidAppear:(BOOL)animated{
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -86,7 +82,6 @@
     return _gameHistory;
 }
 
-
 - (IBAction)startNewGame {
 
     [UIAlertView showWithTitle:@"Reset Game"
@@ -101,11 +96,13 @@
                               
                               //enable segmented control
                               [[self cardMatchModeSegControl] setEnabled:YES];
+                              [[self cardMatchModeSegControl] setSelectedSegmentIndex:0];
                               //reset score label
                               self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
                               
                               //reset game history
                               self.gameHistory = nil;
+                              self.indexOfMatchedCards = nil;
                               
                               [self.gameHistorySlider setMaximumValue:0.0f];
                               [self.gameHistorySlider setValue:0.0f];
@@ -129,22 +126,19 @@
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
-
-    //
-    [self updateUI];
     
     [[self cardMatchModeSegControl] setEnabled:NO];
     
     NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    //[sender setTitle:[[self.game cardAtIndex:chosenButtonIndex] contents] forState:UIControlStateNormal];
     [self updateUI];
     
     //update game history
-    [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text, SCORE_KEY:@(self.game.score)}];
-    [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
+    if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
+        [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text, SCORE_KEY:@(self.game.score)}];
+        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
+    }
     [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
-    
 }
 
 -(void) updateUI{
@@ -164,8 +158,6 @@
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
     [self updateMatchStatusType];
-    
-    
 }
 
 -(NSString *) titleForCard:(Card *)card{
@@ -180,6 +172,8 @@
 -(void) updateMatchStatusType{
     
     switch (self.game.matchStatus) {
+        case MatchStatusTypePreviouslyMatched:
+            break;
         case MatchStatusTypeNoCardSelected:
             self.statusLabel.text = @"";
             break;
@@ -200,19 +194,23 @@
     }
 }
 
-//-(void)setFlipCount:(int)flipCount{
-//    _flipCount = flipCount;
-//    [[self flipsLabel] setText:[NSString stringWithFormat:@"Flips:%i",_flipCount]];
-//}
 
 - (IBAction)viewGameHistory:(id)sender {
     if ([self.gameHistory count] == 0){
         return;
     }
     
-    float value = [(UISlider*)sender value];
-    [self updateUIWithHistory:(NSDictionary*)self.gameHistory[(int)value]];
-    
+    int value = (int)[(UISlider*)sender value];
+    NSLog(@"chosen card:%@",self.gameHistory[value][CHOSEN_CARD_KEY]);
+    NSLog(@"status:%@",self.gameHistory[value][STATUS_KEY]);
+    NSString *x = @"matched card:";
+    for (NSNumber *y in self.gameHistory[value][MATCHED_CARDS_KEY]){
+        x=[x stringByAppendingFormat:@" %@,",y];
+    }
+    NSLog(x);
+    [(UISlider*)sender setValue:(float)value];
+    [self updateUIWithHistory:(NSDictionary*)self.gameHistory[value]];
+
     
 }
 

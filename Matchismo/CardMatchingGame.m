@@ -61,9 +61,10 @@ static const int COST_TO_CHOOSE = 1;
     Card *card = [self cardAtIndex:index];
     
     //if card is matched, do nothing
-    if (card.isMatched)
+    if (card.isMatched){
+        self.matchStatus = MatchStatusTypePreviouslyMatched;
         return;
-    
+    }
     //toggle
     if (card.isChosen){
         self.currentCard = nil;
