@@ -10,6 +10,10 @@
 #import "Deck.h"
 #import "Card.h"
 
+#define MatchStatusTypeChangedNotification @"MatchStatusTypeChanged"
+
+#define MISMATCH_PENALTY 2
+
 @interface CardMatchingGame : NSObject
 
 //designated initializer
@@ -20,7 +24,18 @@
 
 
 @property (nonatomic,readonly) NSInteger score;
+@property (nonatomic,readonly) NSInteger matchScore;
 @property (nonatomic) NSUInteger numberOfCardsMatchMode;
+@property (nonatomic,strong) NSMutableArray *chosenCards; //of Cards
+@property (nonatomic,weak) Card *currentCard;
+
+typedef enum MatchStatusTypes{
+    MatchStatusTypeNoCardSelected,
+    MatchStatusTypeNotEnoughMoves,
+    MatchStatusTypeMatchFound,
+    MatchStatusTypeMatchNotFound
+} MatchStatus;
+@property (nonatomic) MatchStatus matchStatus;
 
 
 

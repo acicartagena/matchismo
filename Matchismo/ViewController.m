@@ -23,10 +23,14 @@
 //@property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 //@property (nonatomic) int flipCount;
 //@property (strong,nonatomic) Deck *deck;
-@property (strong,nonatomic) CardMatchingGame *game;
+
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons; //contain all UIButtons in random order
+
+@property (strong,nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
+@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+
 
 @end
 
@@ -37,6 +41,14 @@
 //    if (!_deck) _deck = [self createDeck];
 //    return _deck;
 //}
+
+-(void) viewDidAppear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateMatchStatusType)
+                                                 name:MatchStatusTypeChangedNotification
+                                               object:nil];
+}
+
 
 -(CardMatchingGame *)game{
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[[self cardButtons] count] usingDeck:[self createDeck]];
@@ -114,8 +126,34 @@
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
     }
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
     
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
+    [self updateMatchStatusType];
+    
+    
+}
+
+-(void) updateMatchStatusType{
+
+    switch (self.game.matchStatus) {
+        case MatchStatusTypeNoCardSelected:
+            self.statusLabel.text = @"";
+            break;
+        case MatchStatusTypeNotEnoughMoves:
+            self.statusLabel.text = @"";
+            for (Card *card in self.game.chosenCards){
+                self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@"%@ ",card.contents];
+            }
+            break;
+        case MatchStatusTypeMatchFound:
+            self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ match! for %i point(s)",[self.game.currentCard contents], self.game.matchScore];
+            break;
+        case MatchStatusTypeMatchNotFound:
+            self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ doesn't match! %i point penalty!",[self.game.currentCard contents], MISMATCH_PENALTY];
+            break;
+        default:
+            break;
+    }
 }
 
 -(NSString *) titleForCard:(Card *)card{
@@ -132,6 +170,10 @@
 //    [[self flipsLabel] setText:[NSString stringWithFormat:@"Flips:%i",_flipCount]];
 //}
 
-
+-(void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:MatchStatusTypeChangedNotification
+                                                  object:nil];
+}
 
 @end
