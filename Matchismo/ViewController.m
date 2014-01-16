@@ -11,6 +11,13 @@
 #import "PlayingCardDeck.h"
 #import "PlayingCard.h"
 #import "CardMatchingGame.h"
+#import "UIAlertView+Blocks.h"
+
+#define ALERT_OK_BUTTON @"yes"
+#define ALERT_CANCEL_BUTTON @"no"
+
+#define TWO_CARD_MATCH_MODE_INDEX 0
+#define THREE_CARD_MATCH_MODE_INDEX 1
 
 @interface ViewController ()
 //@property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
@@ -19,6 +26,7 @@
 @property (strong,nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons; //contain all UIButtons in random order
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
 
 @end
 
@@ -39,15 +47,38 @@
     return [[PlayingCardDeck alloc] init];
 }
 - (IBAction)startNewGame {
-    //delete previous game
-    _game = nil;
-    
-    //reset score
+
+    [UIAlertView showWithTitle:@"Reset Game"
+                       message:@"Are you sure?"
+             cancelButtonTitle:ALERT_CANCEL_BUTTON otherButtonTitles:@[ALERT_OK_BUTTON]
+                      tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                          if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
+
+                              //reset game
+                              _game = nil;
+                              [self updateUI];
+                              
+                              //enable segmented control
+                              [[self cardMatchModeSegControl] setEnabled:YES];
+                              //reset score label
+                              self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
+                              
+                          }
+                 
+                      }];
     
 }
 
--(void) resetGame{
-    
+- (IBAction)cardMatchModeUpdate:(id)sender {
+    NSInteger selectedSeg = [(UISegmentedControl*)sender selectedSegmentIndex];
+    switch (selectedSeg) {
+        case TWO_CARD_MATCH_MODE_INDEX:
+            self.game.numberOfCardsMatchMode = 2;
+            break;
+        case THREE_CARD_MATCH_MODE_INDEX:
+            self.game.numberOfCardsMatchMode = 3;
+            break;
+    }
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
@@ -63,6 +94,8 @@
 //        }
 //    }
 //    self.flipCount ++;
+    //enable segmented control
+    [[self cardMatchModeSegControl] setEnabled:NO];
     
     NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
@@ -70,6 +103,7 @@
     [self updateUI];
     
 }
+
 
 -(void) updateUI{
     for (UIButton *cardButton in self.cardButtons){

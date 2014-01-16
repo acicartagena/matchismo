@@ -9,11 +9,20 @@
 #import "CardMatchingGame.h"
 
 @interface CardMatchingGame ()
+
 @property (nonatomic,readwrite) NSInteger score;
 @property (nonatomic,strong) NSMutableArray *cards; //of Cards
+@property (nonatomic,strong) NSMutableArray *chosenCards; //of Cards
+
 @end
 
 @implementation CardMatchingGame
+
+static const int MISMATCH_PENALTY = 2;
+//static const int MATCH_BONUS = 4;
+static const int TWOCARD_MATCH_BONUS = 4;
+static const int THREECARD_MATCH_BONUS = 2;
+static const int COST_TO_CHOOSE = 1;
 
 -(NSMutableArray *) cards{
     if (!_cards) _cards = [[NSMutableArray alloc] init];
@@ -31,6 +40,8 @@
                 self = nil;
                 break;
             }
+            //set the default to 2 card match mode
+            self.numberOfCardsMatchMode = 2;
         }
     }
     return self;
@@ -40,35 +51,66 @@
     return (index<[self.cards count]) ? [self.cards objectAtIndex:index]:nil;
 }
 
-static const int MISMATCH_PENALTY = 2;
-static const int MATCH_BONUS = 4;
-static const int COST_TO_CHOOSE = 1;
+-(NSMutableArray *) chosenCards{
+    if (!_chosenCards) _chosenCards = [[NSMutableArray alloc] init];
+    return _chosenCards;
+}
 
 -(void) chooseCardAtIndex:(NSUInteger)index{
     Card *card = [self cardAtIndex:index];
-    if (!card.isMatched){
-        if (card.isChosen){
-            card.chosen = NO;
-        }else{
-            //match against other chosen cards
-            for (Card *otherCard in self.cards){
-                if (otherCard.isChosen && !otherCard.isMatched){
-                    int matchScore = [card match:@[otherCard]];
-                    if (matchScore) {
-                        self.score += matchScore* MATCH_BONUS;
-                        otherCard.matched = YES;
-                        card.matched = YES;
-                    }else{
-                        self.score -=MISMATCH_PENALTY;
-                        otherCard.chosen = NO;
-                    }
-                    break;
-                }
-            }
-            self.score -= COST_TO_CHOOSE;
-            card.chosen = YES;
+    
+    //if card is matched, do nothing
+    if (card.isMatched)
+        return;
+    
+    //toggle
+    if (card.isChosen){
+        card.chosen = NO;
+        if ([self.chosenCards containsObject:card]){
+            [self.chosenCards removeObject:card];
+        }
+        return;
+    }
+    
+    if ([[self chosenCards] count] < self.numberOfCardsMatchMode-1){
+        card.chosen = YES;
+        [[self chosenCards] addObject:card];
+        self.score -= COST_TO_CHOOSE;
+        
+    }else {
+        
+        int matchScore = [card match:self.chosenCards];
+        
+        //for 3 card match mode, check for the match between the 1st and 2nd cards
+        if (self.numberOfCardsMatchMode == 3){
+            matchScore += [self.chosenCards[0] match:@[self.chosenCards[1]]];
         }
         
+        if (matchScore){
+            self.score += (matchScore * (self.numberOfCardsMatchMode == 2 ? 4:2));
+            for (Card *card in [self chosenCards]){
+                card.matched = YES;
+            }
+            card.matched = YES;
+            card.chosen = YES;
+            //release chosen cards
+            self.chosenCards = nil;
+        }else{
+            self.score -= MISMATCH_PENALTY;
+            for (Card *card in [self chosenCards]){
+                card.chosen = NO;
+            }
+            card.chosen = NO;
+            
+            //release chosen cards
+            self.chosenCards = nil;
+            card.chosen = YES;
+            [self.chosenCards addObject:card];
+        }
+        
+        
     }
+    
+    
 }
 @end

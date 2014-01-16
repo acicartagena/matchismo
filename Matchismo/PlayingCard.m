@@ -23,14 +23,13 @@
 
 -(int)match:(NSArray *)otherCards{
     int score = 0;
-    if ([otherCards count] ==1){
-        PlayingCard *otherCard = [otherCards firstObject];//same as [NSArray objectAtIndex:0] return nil if array is empty
+    
+    for (PlayingCard *otherCard in otherCards){
         if (otherCard.rank == self.rank){
-            score = 4;
+            score += 4;
         }else if ([otherCard.suit isEqualToString:self.suit]){
-            score = 1;
+            score += 1;
         }
-        
     }
     return score;
 }

@@ -37,59 +37,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Matchismo/ViewController.m"
-            timestampString = "411458753.807251"
+            filePath = "Matchismo/CardMatchingGame.m"
+            timestampString = "411548550.029344"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "-updateUI"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "-chooseCardAtIndex:"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ViewController updateUI]"
-                  moduleName = "Matchismo"
-                  urlString = "file:///Users/it_admin/Desktop/Matchismo/Matchismo/ViewController.m"
-                  timestampString = "411457198.439386"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "62"
-                  endingLineNumber = "62"
-                  offsetFromSymbolStart = "42">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[ViewController updateUI]"
-                  moduleName = "Matchismo"
-                  urlString = "file:///Users/it_admin/Desktop/Matchismo/Matchismo/ViewController.m"
-                  timestampString = "411457198.441134"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "62"
-                  endingLineNumber = "62"
-                  offsetFromSymbolStart = "830">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Matchismo/ViewController.m"
-            timestampString = "411458913.114678"
+            filePath = "Matchismo/CardMatchingGame.m"
+            timestampString = "411549821.202815"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "-updateUI"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "-chooseCardAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
