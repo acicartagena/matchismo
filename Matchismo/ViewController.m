@@ -7,9 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "Deck.h"
-#import "PlayingCardDeck.h"
-#import "PlayingCard.h"
 #import "CardMatchingGame.h"
 #import "UIAlertView+Blocks.h"
 
@@ -34,12 +31,12 @@
 
 @property (strong,nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
+//@property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
 @property (strong,nonatomic) NSMutableArray *gameHistory;
 @property (strong,nonatomic) NSMutableSet *indexOfMatchedCards;
-@property (weak, nonatomic) IBOutlet UISlider *gameHistorySlider;
+//@property (weak, nonatomic) IBOutlet UISlider *gameHistorySlider;
 
 @property (nonatomic) BOOL browseHistory;
 
@@ -69,7 +66,8 @@
 }
 
 -(Deck *)createDeck{
-    return [[PlayingCardDeck alloc] init];
+//    return [[PlayingCardDeck alloc] init];
+    return nil;
 }
 
 -(NSMutableSet *) indexOfMatchedCards{
@@ -95,8 +93,8 @@
                               [self updateUI];
                               
                               //enable segmented control
-                              [[self cardMatchModeSegControl] setEnabled:YES];
-                              [[self cardMatchModeSegControl] setSelectedSegmentIndex:0];
+//                              [[self cardMatchModeSegControl] setEnabled:YES];
+//                              [[self cardMatchModeSegControl] setSelectedSegmentIndex:0];
                               //reset score label
                               self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
                               
@@ -104,8 +102,8 @@
                               self.gameHistory = nil;
                               self.indexOfMatchedCards = nil;
                               
-                              [self.gameHistorySlider setMaximumValue:0.0f];
-                              [self.gameHistorySlider setValue:0.0f];
+//                              [self.gameHistorySlider setMaximumValue:0.0f];
+//                              [self.gameHistorySlider setValue:0.0f];
                               
                           }
                  
@@ -127,7 +125,7 @@
 
 - (IBAction)touchCardButton:(UIButton *)sender {
     
-    [[self cardMatchModeSegControl] setEnabled:NO];
+//    [[self cardMatchModeSegControl] setEnabled:NO];
     
     NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
@@ -136,9 +134,9 @@
     //update game history
     if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
         [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text, SCORE_KEY:@(self.game.score)}];
-        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
+//        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
     }
-    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
+//    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
 }
 
 -(void) updateUI{
@@ -184,7 +182,7 @@
             }
             break;
         case MatchStatusTypeMatchFound:
-            self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ match! for %i point(s)",[self.game.currentCard contents], self.game.matchScore];
+            self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ match! for %li point(s)",[self.game.currentCard contents], (long)self.game.matchScore];
             break;
         case MatchStatusTypeMatchNotFound:
             self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ doesn't match! %i point penalty!",[self.game.currentCard contents], MISMATCH_PENALTY];
@@ -201,13 +199,13 @@
     }
     
     int value = (int)[(UISlider*)sender value];
-    NSLog(@"chosen card:%@",self.gameHistory[value][CHOSEN_CARD_KEY]);
-    NSLog(@"status:%@",self.gameHistory[value][STATUS_KEY]);
-    NSString *x = @"matched card:";
-    for (NSNumber *y in self.gameHistory[value][MATCHED_CARDS_KEY]){
-        x=[x stringByAppendingFormat:@" %@,",y];
-    }
-    NSLog(x);
+//    NSLog(@"chosen card:%@",self.gameHistory[value][CHOSEN_CARD_KEY]);
+//    NSLog(@"status:%@",self.gameHistory[value][STATUS_KEY]);
+//    NSString *x = @"matched card:";
+//    for (NSNumber *y in self.gameHistory[value][MATCHED_CARDS_KEY]){
+//        x=[x stringByAppendingFormat:@" %@,",y];
+//    }
+//    NSLog(x);
     [(UISlider*)sender setValue:(float)value];
     [self updateUIWithHistory:(NSDictionary*)self.gameHistory[value]];
 
@@ -235,7 +233,7 @@
     [cardButton setBackgroundImage:[UIImage imageNamed:@"cardFront"] forState:UIControlStateNormal];
     cardButton.enabled = YES;
     
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",[(NSNumber*)historyData[SCORE_KEY] integerValue]];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %li",(long)[(NSNumber*)historyData[SCORE_KEY] integerValue]];
     self.statusLabel.text = historyData[STATUS_KEY];
     
 }

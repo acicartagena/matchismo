@@ -14,7 +14,6 @@
 @property (nonatomic,readwrite) NSInteger matchScore;
 @property (nonatomic,strong) NSMutableArray *cards; //of Cards
 
-
 @end
 
 @implementation CardMatchingGame
@@ -41,7 +40,7 @@ static const int COST_TO_CHOOSE = 1;
                 break;
             }
             //set the default to 2 card match mode
-            self.numberOfCardsMatchMode = 2;
+            self.numberOfCardsMatchMode = 3;
             self.matchStatus = MatchStatusTypeNoCardSelected;
         }
     }
@@ -89,11 +88,6 @@ static const int COST_TO_CHOOSE = 1;
     else {
         //check if the existing cards in the array match the current card
         self.matchScore = [card match:self.chosenCards];
-        
-        //for 3 card match mode, check for the match between the 1st and 2nd cards
-        if (self.numberOfCardsMatchMode == 3){
-            self.matchScore += [self.chosenCards[0] match:@[self.chosenCards[1]]];
-        }
         
         if (self.matchScore){
             self.matchScore *=(self.numberOfCardsMatchMode == 2 ? 4:2);
