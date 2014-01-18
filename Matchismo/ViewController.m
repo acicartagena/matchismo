@@ -40,7 +40,6 @@
 
 @property (nonatomic) BOOL browseHistory;
 
--(void) updateUI;
 -(void) updateMatchStatusType;
 
 @end
@@ -48,6 +47,8 @@
 @implementation ViewController
 
 -(void) viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    NSLog(@"vc view did appear");
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updateMatchStatusType)
                                                  name:MatchStatusTypeChangedNotification
@@ -140,6 +141,7 @@
 }
 
 -(void) updateUI{
+    NSLog(@"update ui");
     for (UIButton *cardButton in self.cardButtons){
         NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];

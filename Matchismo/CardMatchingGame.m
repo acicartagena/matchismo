@@ -40,7 +40,7 @@ static const int COST_TO_CHOOSE = 1;
                 break;
             }
             //set the default to 2 card match mode
-            self.numberOfCardsMatchMode = 3;
+            self.numberOfCardsMatchMode = [deck numberOfCardsMatchMode];
             self.matchStatus = MatchStatusTypeNoCardSelected;
         }
     }

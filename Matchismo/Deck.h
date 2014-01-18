@@ -11,9 +11,12 @@
 
 @interface Deck : NSObject
 
+@property (nonatomic) NSUInteger numberOfCardsMatchMode;
+
 -(void)addCard:(Card *)card atTop:(BOOL) atTop;
 -(void)addCard:(Card *)card;
 -(Card*)drawRandomCard;
+
 
 
 @end

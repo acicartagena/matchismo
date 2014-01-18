@@ -15,6 +15,12 @@
 
 @implementation SetCardGameViewController
 
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self updateUI];
+    
+}
+
 -(Deck*) createDeck{
     return [[SetCardDeck alloc] init];
     
@@ -24,6 +30,12 @@
     //NSString *title = card.isChosen ? card.contents : @"";
     NSString *title = card.contents;
     return title;
+}
+
+-(UIImage *) backgroundImageForCard:(Card *)card{
+    UIImage *temp =[UIImage imageNamed:card.isChosen ? @"matchedSetCard" : @"cardFront"];
+    NSLog(@"card is chosen: %i ui image: %@",card.isChosen, temp);
+    return temp;
 }
 
 @end

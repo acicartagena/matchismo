@@ -100,16 +100,16 @@
     while (key = (NSString*) [keyEnum nextObject]){
         NSLog(@"check key:%@",key);
         partial = [self checkProperty:key OfCards:otherCards forSameValue:YES];
-        NSLog(@"partial after same: %i",partial);
+        NSLog(@"partial after check same value: %i",partial);
         if (partial != 2){
             partial = [self checkProperty:key OfCards:otherCards forSameValue:NO];
         }
-        NSLog(@"partial after different value: %i",partial);
+        NSLog(@"partial after check different value: %i",partial);
         if (partial != 2){
             score = 0;
             break;
         }else{
-            score = 1;
+            score = 8;
         }
     }
     NSLog(@"score:%i",score);
@@ -123,26 +123,22 @@
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@" self.%@ == %@",property,self.contentsDictionary[property]];
     NSArray* filteredArray = [otherCards filteredArrayUsingPredicate:predicate];
     NSLog(@"filtered array count:%i, otherCards count:%i",filteredArray.count,otherCards.count);
-    if (isSame){
-        if (filteredArray.count == otherCards.count){
-            score = 1;
-            NSLog(@"1score:%i",score);
-            if (otherCards.count == 2){
-                NSLog(@"check 2 cards");
-                score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
-                NSLog(@"2score:%i",score);
-            }
-            
+    if (isSame && (filteredArray.count == otherCards.count)){
+        score = 1;
+        NSLog(@"1score:%i",score);
+        if (otherCards.count == 2){
+            NSLog(@"check 2 cards");
+            score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
+            NSLog(@"2score:%i",score);
         }
-    }else{
-        if (filteredArray.count == 0){
-            score = 1;
-            NSLog(@"1score:%i",score);
-            if (otherCards.count == 2){
-                NSLog(@"check 2 cards");
-                score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
-                NSLog(@"2score:%i",score);
-            }
+        
+    }else if (!isSame && (filteredArray.count == 0)){
+        score = 1;
+        NSLog(@"1score:%i",score);
+        if (otherCards.count == 2){
+            NSLog(@"check 2 cards");
+            score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
+            NSLog(@"2score:%i",score);
         }
     }
     

@@ -13,5 +13,6 @@
 
 
 -(Deck *)createDeck;//abstract method for subclassing
+-(void) updateUI;
 
 @end

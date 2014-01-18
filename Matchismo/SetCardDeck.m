@@ -28,6 +28,7 @@
                 }
             }
         }
+        self.numberOfCardsMatchMode = 3;
     }
     return self;
 }

@@ -22,7 +22,7 @@
                 [self addCard:card];
             }
         }
-        
+        self.numberOfCardsMatchMode = 2;
     }
     return self;
 }
