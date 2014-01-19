@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "Deck.h"
+#import "CardMatchingGame.h"
 
 @interface ViewController : UIViewController
 
+@property (strong,readonly,nonatomic) CardMatchingGame *game;
+@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
 -(Deck *)createDeck;//abstract method for subclassing
 -(void) updateUI;
+
 
 @end

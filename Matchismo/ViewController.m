@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "CardMatchingGame.h"
 #import "UIAlertView+Blocks.h"
 
 #define ALERT_OK_BUTTON @"yes"
@@ -29,10 +28,10 @@
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons; //contain all UIButtons in random order
 
-@property (strong,nonatomic) CardMatchingGame *game;
+@property (strong,readwrite,nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
-@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+
 
 @property (strong,nonatomic) NSMutableArray *gameHistory;
 @property (strong,nonatomic) NSMutableSet *indexOfMatchedCards;
@@ -141,12 +140,13 @@
 }
 
 -(void) updateUI{
-    NSLog(@"update ui");
+    //NSLog(@"update ui");
     for (UIButton *cardButton in self.cardButtons){
         NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];
         NSString *title = [self titleForCard:card];
         [cardButton setTitle:title forState:UIControlStateNormal];
+        [cardButton setAttributedTitle:[self attributedTitleForCard:card] forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
         
@@ -158,6 +158,10 @@
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
     [self updateMatchStatusType];
+}
+
+-(NSAttributedString *) attributedTitleForCard:(Card *)card{
+    return nil;
 }
 
 -(NSString *) titleForCard:(Card *)card{
@@ -172,23 +176,62 @@
 -(void) updateMatchStatusType{
     
     switch (self.game.matchStatus) {
+            
         case MatchStatusTypePreviouslyMatched:
             break;
-        case MatchStatusTypeNoCardSelected:
+            
+        case MatchStatusTypeNoCardSelected:{
             self.statusLabel.text = @"";
+            self.statusLabel.attributedText = [[NSAttributedString alloc] init];
             break;
-        case MatchStatusTypeNotEnoughMoves:
+        }
+            
+        case MatchStatusTypeNotEnoughMoves:{
             self.statusLabel.text = @"";
             for (Card *card in self.game.chosenCards){
-                self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@"%@ ",card.contents];
+                if (!card.contents){
+                    self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@, ",card.contents];
+                }
+                if (card.contentsDictionary){
+                    NSMutableAttributedString *mutableAttrString = [self.statusLabel.attributedText mutableCopy];
+                    [mutableAttrString appendAttributedString:[self attributedTitleForCard:card]];
+                    self.statusLabel.attributedText = mutableAttrString;
+                }
             }
             break;
-        case MatchStatusTypeMatchFound:
-            self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ match! for %li point(s)",[self.game.currentCard contents], (long)self.game.matchScore];
+        }
+            
+        case MatchStatusTypeMatchFound:{
+            if (self.game.currentCard.contents){
+                self.statusLabel.text = [self.statusLabel.text
+                                     stringByAppendingFormat:@" %@ match! for %li point(s)",[self.game.currentCard contents], (long)self.game.matchScore];
+            }
+            if (self.game.currentCard.contentsDictionary){
+                 NSMutableAttributedString *mutableAttrString = [self.statusLabel.attributedText mutableCopy];
+                [mutableAttrString appendAttributedString:[self attributedTitleForCard:self.game.currentCard]];
+                [mutableAttrString appendAttributedString:[[NSAttributedString alloc]
+                                                           initWithString:[NSString stringWithFormat:@" match! for %li point(s)",(long)self.game.matchScore]]];
+                self.statusLabel.attributedText = mutableAttrString;
+            }
             break;
-        case MatchStatusTypeMatchNotFound:
-            self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ doesn't match! %i point penalty!",[self.game.currentCard contents], MISMATCH_PENALTY];
+        }
+            
+        case MatchStatusTypeMatchNotFound:{
+            if (self.game.currentCard.contents){
+                self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ doesn't match! %i point penalty!",
+                                     [self.game.currentCard contents], MISMATCH_PENALTY];
+            }
+            
+            if (self.game.currentCard.contentsDictionary){
+                NSMutableAttributedString *mutableAttrString = [self.statusLabel.attributedText mutableCopy];
+                [mutableAttrString appendAttributedString:[self attributedTitleForCard:self.game.currentCard]];
+                [mutableAttrString appendAttributedString:[[NSAttributedString alloc]
+                                                           initWithString:[NSString stringWithFormat:@" doesn't match! %i point penalty!",MISMATCH_PENALTY]]];
+                self.statusLabel.attributedText = mutableAttrString;
+            }
             break;
+        }
+            
         default:
             break;
     }
@@ -218,11 +261,13 @@
     //set matched cards, reset other cards
     for (UIButton *cardButton in self.cardButtons){
         NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        
         if ([(NSArray*)historyData[MATCHED_CARDS_KEY] containsObject:@(cardButtonIndex)]){
             [cardButton setTitle:[self.game cardAtIndex:cardButtonIndex].contents forState:UIControlStateNormal];
             [cardButton setBackgroundImage:[UIImage imageNamed:@"cardFront"] forState:UIControlStateNormal];
             cardButton.enabled = NO;
-        }else{
+        }
+        else{
             [cardButton setBackgroundImage:[UIImage imageNamed:@"cardBack"] forState:UIControlStateNormal];
             [cardButton setTitle:@"" forState:UIControlStateNormal];
             cardButton.enabled = YES;

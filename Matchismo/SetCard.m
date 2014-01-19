@@ -10,27 +10,17 @@
 
 @interface SetCard ()
 
-@property (nonatomic) BOOL sameColor;
-@property (nonatomic) BOOL sameSymbol;
-@property (nonatomic) BOOL sameShade;
-@property (nonatomic) BOOL sameRank;
-@property (nonatomic,strong) NSDictionary *contentsDictionary;
-
 @end
 
 @implementation SetCard
 
 @synthesize symbol = _symbol;
 @synthesize color = _color;
+@synthesize contentsDictionary = _contentsDictionary;
 
 -(instancetype) init{
     self = [super init];
     if (self){
-        
-        self.sameColor = YES;
-        self.sameRank = YES;
-        self.sameShade = YES;
-        self.sameSymbol = YES;
         
     }
     return self;
@@ -61,7 +51,13 @@
 
 //format for contents <rank><color><symbol><shading>
 -(NSString *)contents{
-    return [NSString stringWithFormat:@"%i%@%@%i",[self rank],[self color],[self symbol],[self shading]];
+    //return [NSString stringWithFormat:@"%i%@%@%i",[self rank],[self color],[self symbol],[self shading]];
+    return nil;
+}
+
+-(NSAttributedString*) attributedContents{
+    NSMutableAttributedString *temp;
+    return temp;
 }
 
 -(NSString *)symbol{
@@ -98,13 +94,13 @@
     NSEnumerator *keyEnum = [self.contentsDictionary keyEnumerator];
     NSString *key = nil;
     while (key = (NSString*) [keyEnum nextObject]){
-        NSLog(@"check key:%@",key);
+        //NSLog(@"check key:%@",key);
         partial = [self checkProperty:key OfCards:otherCards forSameValue:YES];
-        NSLog(@"partial after check same value: %i",partial);
+        //NSLog(@"partial after check same value: %i",partial);
         if (partial != 2){
             partial = [self checkProperty:key OfCards:otherCards forSameValue:NO];
         }
-        NSLog(@"partial after check different value: %i",partial);
+        //NSLog(@"partial after check different value: %i",partial);
         if (partial != 2){
             score = 0;
             break;
@@ -112,33 +108,33 @@
             score = 8;
         }
     }
-    NSLog(@"score:%i",score);
+    //NSLog(@"score:%i",score);
     return score;
 }
 
 -(int) checkProperty:(NSString*)property OfCards:(NSArray*)otherCards forSameValue:(BOOL)isSame{
     
     int score = 0;
-    NSLog(@"predicate: %@ == %@",property,self.contentsDictionary[property]);
+    //NSLog(@"predicate: %@ == %@",property,self.contentsDictionary[property]);
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@" self.%@ == %@",property,self.contentsDictionary[property]];
     NSArray* filteredArray = [otherCards filteredArrayUsingPredicate:predicate];
-    NSLog(@"filtered array count:%i, otherCards count:%i",filteredArray.count,otherCards.count);
+    //NSLog(@"filtered array count:%i, otherCards count:%i",filteredArray.count,otherCards.count);
     if (isSame && (filteredArray.count == otherCards.count)){
         score = 1;
-        NSLog(@"1score:%i",score);
+        //NSLog(@"1score:%i",score);
         if (otherCards.count == 2){
-            NSLog(@"check 2 cards");
+            //NSLog(@"check 2 cards");
             score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
-            NSLog(@"2score:%i",score);
+            //NSLog(@"2score:%i",score);
         }
         
     }else if (!isSame && (filteredArray.count == 0)){
         score = 1;
-        NSLog(@"1score:%i",score);
+        //NSLog(@"1score:%i",score);
         if (otherCards.count == 2){
-            NSLog(@"check 2 cards");
+            //NSLog(@"check 2 cards");
             score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
-            NSLog(@"2score:%i",score);
+            //NSLog(@"2score:%i",score);
         }
     }
     

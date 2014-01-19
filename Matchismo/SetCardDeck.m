@@ -17,7 +17,7 @@
         for (NSString *symbol in [SetCard validSymbols]){
             for (NSString *color in [SetCard validColors]){
                 for (NSNumber *shading in [SetCard validShades]){
-                    for (int i=0; i<[SetCard maxRank];i++){
+                    for (int i=1; i<=[SetCard maxRank];i++){
                         SetCard *card = [[SetCard alloc] init];
                         card.symbol = symbol;
                         card.color = color;
