@@ -31,6 +31,7 @@
 		54B6D03D1889015200578DAC /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D03C1889015200578DAC /* SetCard.m */; };
 		54B6D0401889017900578DAC /* SetCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D03F1889017900578DAC /* SetCardDeck.m */; };
 		54B6D046188912BA00578DAC /* SetCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D045188912BA00578DAC /* SetCardGameViewController.m */; };
+		6072CD04188D699C00F5D2CB /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6072CD03188D699C00F5D2CB /* HistoryViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,8 @@
 		54B6D03F1889017900578DAC /* SetCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardDeck.m; sourceTree = "<group>"; };
 		54B6D044188912BA00578DAC /* SetCardGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardGameViewController.h; sourceTree = "<group>"; };
 		54B6D045188912BA00578DAC /* SetCardGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardGameViewController.m; sourceTree = "<group>"; };
+		6072CD02188D699C00F5D2CB /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
+		6072CD03188D699C00F5D2CB /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +233,8 @@
 				54B6D0381888FED500578DAC /* PlayingCardGameViewController.m */,
 				54B6D044188912BA00578DAC /* SetCardGameViewController.h */,
 				54B6D045188912BA00578DAC /* SetCardGameViewController.m */,
+				6072CD02188D699C00F5D2CB /* HistoryViewController.h */,
+				6072CD03188D699C00F5D2CB /* HistoryViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -336,6 +341,7 @@
 				54B6D046188912BA00578DAC /* SetCardGameViewController.m in Sources */,
 				5439FF4018861D96006CC0A7 /* ViewController.m in Sources */,
 				54B6D0391888FED500578DAC /* PlayingCardGameViewController.m in Sources */,
+				6072CD04188D699C00F5D2CB /* HistoryViewController.m in Sources */,
 				5428F3CF1887896D00BBFE8F /* UIAlertView+Blocks.m in Sources */,
 				54B6D03D1889015200578DAC /* SetCard.m in Sources */,
 				5439FF3A18861D96006CC0A7 /* AppDelegate.m in Sources */,

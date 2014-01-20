@@ -8,17 +8,9 @@
 
 #import "ViewController.h"
 #import "UIAlertView+Blocks.h"
+#import "HistoryViewController.h"
 
-#define ALERT_OK_BUTTON @"yes"
-#define ALERT_CANCEL_BUTTON @"no"
 
-#define TWO_CARD_MATCH_MODE_INDEX 0
-#define THREE_CARD_MATCH_MODE_INDEX 1
-
-#define CHOSEN_CARD_KEY @"chosenCard"
-#define MATCHED_CARDS_KEY @"matchedCards"
-#define STATUS_KEY @"status"
-#define SCORE_KEY @"score"
 
 
 @interface ViewController ()
@@ -133,7 +125,7 @@
     
     //update game history
     if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
-        [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text, SCORE_KEY:@(self.game.score)}];
+        [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text?self.statusLabel.text:self.statusLabel.attributedText, SCORE_KEY:@(self.game.score)}];
 //        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
     }
 //    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
@@ -189,12 +181,13 @@
         case MatchStatusTypeNotEnoughMoves:{
             self.statusLabel.text = @"";
             for (Card *card in self.game.chosenCards){
-                if (!card.contents){
+                if (card.contents){
                     self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@, ",card.contents];
                 }
                 if (card.contentsDictionary){
                     NSMutableAttributedString *mutableAttrString = [self.statusLabel.attributedText mutableCopy];
                     [mutableAttrString appendAttributedString:[self attributedTitleForCard:card]];
+                    [mutableAttrString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
                     self.statusLabel.attributedText = mutableAttrString;
                 }
             }
@@ -284,5 +277,13 @@
     self.statusLabel.text = historyData[STATUS_KEY];
     
 }
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.identifier isEqualToString:@"setToHistory"]|| [segue.identifier isEqualToString:@"playingToHistory"] ) {
+        HistoryViewController *vc = (HistoryViewController *)segue.destinationViewController;
+        [vc setHistory:self.gameHistory];
+    }
+}
+
 
 @end
