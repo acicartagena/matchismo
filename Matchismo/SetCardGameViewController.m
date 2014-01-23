@@ -82,6 +82,15 @@
     return temp;
 }
 
+-(void) updateGameHistoryWithChosenCard:(NSUInteger) chosenButtonIndex{
+    NSLog(@"status label text:%@",self.statusLabel.text);
+    NSLog(@"status label attributed text:%@",self.statusLabel.attributedText);
+    if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
+        [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.attributedText, SCORE_KEY:@(self.game.score)}];
+        //        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
+    }
+    //    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
+}
 
 
 @end

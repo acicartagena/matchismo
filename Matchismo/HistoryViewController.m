@@ -40,7 +40,7 @@
         if ([move[STATUS_KEY] isKindOfClass:[NSString class]]){
             self.historyView.text = [self.historyView.text stringByAppendingFormat:@"%@ \n",move[STATUS_KEY]];
         }else{
-            temp = [self.historyView mutableCopy];
+            temp = [self.historyView.attributedText mutableCopy];
             [temp appendAttributedString:move[STATUS_KEY]];
             [temp appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n" ]];
             self.historyView.attributedText = temp;

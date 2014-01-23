@@ -23,7 +23,9 @@
 
 @interface ViewController : UIViewController
 
-@property (strong,readonly,nonatomic) CardMatchingGame *game;
+@property (strong, readonly, nonatomic) CardMatchingGame *game;
+@property (strong, readonly, nonatomic) NSMutableArray *gameHistory;
+@property (strong, readonly, nonatomic) NSMutableSet *indexOfMatchedCards;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
 -(Deck *)createDeck;//abstract method for subclassing

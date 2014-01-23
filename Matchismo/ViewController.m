@@ -20,13 +20,13 @@
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons; //contain all UIButtons in random order
 
-@property (strong,readwrite,nonatomic) CardMatchingGame *game;
+@property (strong, readwrite, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
 
 
-@property (strong,nonatomic) NSMutableArray *gameHistory;
-@property (strong,nonatomic) NSMutableSet *indexOfMatchedCards;
+@property (strong, readwrite, nonatomic) NSMutableArray *gameHistory;
+@property (strong, readwrite, nonatomic) NSMutableSet *indexOfMatchedCards;
 //@property (weak, nonatomic) IBOutlet UISlider *gameHistorySlider;
 
 @property (nonatomic) BOOL browseHistory;
@@ -124,11 +124,18 @@
     [self updateUI];
     
     //update game history
+    [self updateGameHistoryWithChosenCard:chosenButtonIndex];
+
+}
+
+-(void) updateGameHistoryWithChosenCard:(NSUInteger) chosenButtonIndex{
+    NSLog(@"status label text:%@",self.statusLabel.text);
+    NSLog(@"status label attributed text:%@",self.statusLabel.attributedText);
     if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
         [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text?self.statusLabel.text:self.statusLabel.attributedText, SCORE_KEY:@(self.game.score)}];
-//        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
+        //        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
     }
-//    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
+    //    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
 }
 
 -(void) updateUI{
@@ -246,8 +253,6 @@
 //    NSLog(x);
     [(UISlider*)sender setValue:(float)value];
     [self updateUIWithHistory:(NSDictionary*)self.gameHistory[value]];
-
-    
 }
 
 -(void) updateUIWithHistory:(NSDictionary*) historyData{
