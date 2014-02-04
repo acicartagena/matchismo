@@ -18,6 +18,7 @@
 //@property (nonatomic) int flipCount;
 //@property (strong,nonatomic) Deck *deck;
 
+
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons; //contain all UIButtons in random order
 
 @property (strong, readwrite, nonatomic) CardMatchingGame *game;
@@ -53,7 +54,9 @@
 }
 
 -(CardMatchingGame *)game{
-    if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[[self cardButtons] count] usingDeck:[self createDeck]];
+    if (!_game){
+        _game = [[CardMatchingGame alloc] initWithCardCount:[[self cardButtons] count] usingDeck:[self createDeck]];
+    }
     return _game;
 }
 
@@ -74,14 +77,19 @@
 
 - (IBAction)startNewGame {
 
-    [UIAlertView showWithTitle:@"Reset Game"
+    [UIAlertView showWithTitle:@"New Game"
                        message:@"Are you sure?"
              cancelButtonTitle:ALERT_CANCEL_BUTTON otherButtonTitles:@[ALERT_OK_BUTTON]
                       tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
                           if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
 
+                              //end timer and save game details
+                              [self saveGameStatistics];
+                              
                               //reset game
                               _game = nil;
+                              
+                              //start new game
                               [self updateUI];
                               
                               //enable segmented control
@@ -96,12 +104,33 @@
                               
 //                              [self.gameHistorySlider setMaximumValue:0.0f];
 //                              [self.gameHistorySlider setValue:0.0f];
+
                               
                           }
                  
                       }];
     
 }
+
+- (IBAction)endCurrentGame:(id)sender {
+    
+    [UIAlertView showWithTitle:@"End Game"
+                       message:@"Are you sure?"
+             cancelButtonTitle:ALERT_CANCEL_BUTTON otherButtonTitles:@[ALERT_OK_BUTTON]
+                      tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                          if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
+                              
+                              [self saveGameStatistics];
+                              
+                          }
+                          
+                      }];
+}
+
+- (void)saveGameStatistics{
+    
+}
+
 
 - (IBAction)cardMatchModeUpdate:(id)sender {
     NSInteger selectedSeg = [(UISegmentedControl*)sender selectedSegmentIndex];
