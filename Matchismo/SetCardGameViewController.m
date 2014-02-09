@@ -21,6 +21,7 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     [self updateUI];
+    [self setGameType:GAME_TYPE_SET];
     
 }
 

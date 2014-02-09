@@ -26,11 +26,17 @@
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
 
 
+
 @property (strong, readwrite, nonatomic) NSMutableArray *gameHistory;
 @property (strong, readwrite, nonatomic) NSMutableSet *indexOfMatchedCards;
 //@property (weak, nonatomic) IBOutlet UISlider *gameHistorySlider;
 
 @property (nonatomic) BOOL browseHistory;
+
+@property (nonatomic, getter = isGameEnded) BOOL gameEnded;
+@property (nonatomic, getter = isGameAlreadySaved) BOOL gameAlreadySaved;
+@property (nonatomic, strong) NSString *gameName;
+@property (nonatomic) NSTimeInterval gameTime;
 
 -(void) updateMatchStatusType;
 
@@ -76,51 +82,72 @@
 }
 
 - (IBAction)startNewGame {
-
-    [UIAlertView showWithTitle:@"New Game"
-                       message:@"Are you sure?"
-             cancelButtonTitle:ALERT_CANCEL_BUTTON otherButtonTitles:@[ALERT_OK_BUTTON]
-                      tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
-                          if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
-
-                              //end timer and save game details
-                              [self saveGameStatistics];
-                              
-                              //reset game
-                              _game = nil;
-                              
-                              //start new game
-                              [self updateUI];
-                              
-                              //enable segmented control
-//                              [[self cardMatchModeSegControl] setEnabled:YES];
-//                              [[self cardMatchModeSegControl] setSelectedSegmentIndex:0];
-                              //reset score label
-                              self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
-                              
-                              //reset game history
-                              self.gameHistory = nil;
-                              self.indexOfMatchedCards = nil;
-                              
-//                              [self.gameHistorySlider setMaximumValue:0.0f];
-//                              [self.gameHistorySlider setValue:0.0f];
-
-                              
-                          }
-                 
-                      }];
     
+    void (^tapBlock)(UIAlertView *alertView, NSInteger buttonIndex)=^void(UIAlertView *alertView, NSInteger buttonIndex){
+        
+        if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
+        
+            //end timer and save game details
+            if (alertView.alertViewStyle == UIAlertViewStylePlainTextInput){
+                self.gameName = [[alertView textFieldAtIndex:0] text];
+            }
+            [self saveGameStatistics];
+            
+            //reset game
+            _game = nil;
+            
+            //start new game
+            [self updateUI];
+            [self setGameAlreadySaved:NO];
+            [self setGameEnded:NO];
+            
+            //enable segmented control
+            //                              [[self cardMatchModeSegControl] setEnabled:YES];
+            //                              [[self cardMatchModeSegControl] setSelectedSegmentIndex:0];
+            //reset score label
+            self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
+            
+            //reset game history
+            self.gameHistory = nil;
+            self.indexOfMatchedCards = nil;
+            
+            //                              [self.gameHistorySlider setMaximumValue:0.0f];
+            //                              [self.gameHistorySlider setValue:0.0f];
+        }
+    };
+    
+    NSString *title = @"New Game";
+    NSString *message = @"this will start a NEW game?";
+    NSString *placholder = @"enter your name.";
+    
+    if (self.isGameAlreadySaved){
+        [UIAlertView showWithTitle:title
+                           message:message
+                 cancelButtonTitle:ALERT_CANCEL_BUTTON
+                 otherButtonTitles:@[ALERT_OK_BUTTON]
+                          tapBlock:tapBlock];
+    }else{
+        [UIAlertView showWithTitle:title
+                           message:message
+              textFieldPlaceholder:placholder
+                 cancelButtonTitle:ALERT_CANCEL_BUTTON
+                 otherButtonTitles:@[ALERT_OK_BUTTON]
+                          tapBlock:tapBlock];
+    }
 }
 
 - (IBAction)endCurrentGame:(id)sender {
     
     [UIAlertView showWithTitle:@"End Game"
-                       message:@"Are you sure?"
+                       message:@"This will end your current game?"
+          textFieldPlaceholder:@"Enter your name."
              cancelButtonTitle:ALERT_CANCEL_BUTTON otherButtonTitles:@[ALERT_OK_BUTTON]
                       tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
                           if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
                               
+                              self.gameName = [[alertView textFieldAtIndex:0] text];
                               [self saveGameStatistics];
+                              [self setGameEnded:YES];
                               
                           }
                           
@@ -128,6 +155,27 @@
 }
 
 - (void)saveGameStatistics{
+    
+    if (self.isGameAlreadySaved){
+        return;
+    }
+    [self setGameAlreadySaved:YES];
+    self.gameTime = [self.game endGame];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *data = [[defaults objectForKey:SAVE_KEY] mutableCopy];
+    NSDictionary *gameData = @{SAVE_KEY_NAME:self.gameName,
+                               SAVE_KEY_SCORE:[NSNumber numberWithInt:self.game.score],
+                               SAVE_KEY_GAME_TYPE:self.gameType,
+                               SAVE_KEY_TIME:[NSNumber numberWithInt:self.gameTime]};
+    
+    if (data == nil){
+        data = [[NSMutableArray alloc] initWithArray:@[gameData]];
+    }else{
+        [data addObject:gameData];
+    }
+    
+    [defaults setObject:data forKey:SAVE_KEY];
     
 }
 
@@ -145,6 +193,9 @@
 }
 
 - (IBAction)touchCardButton:(UIButton *)sender {
+    
+    if (self.isGameEnded)
+        return;
     
 //    [[self cardMatchModeSegControl] setEnabled:NO];
     

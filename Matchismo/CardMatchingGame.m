@@ -13,6 +13,8 @@
 @property (nonatomic,readwrite) NSInteger score;
 @property (nonatomic,readwrite) NSInteger matchScore;
 @property (nonatomic,strong) NSMutableArray *cards; //of Cards
+@property (nonatomic, strong) NSDate *startDate;
+@property (nonatomic, strong) NSDate *endDate;
 
 @end
 
@@ -42,6 +44,7 @@ static const int COST_TO_CHOOSE = 1;
             //set the default to 2 card match mode
             self.numberOfCardsMatchMode = [deck numberOfCardsMatchMode];
             self.matchStatus = MatchStatusTypeNoCardSelected;
+            self.startDate = [NSDate date];
         }
     }
     return self;
@@ -54,6 +57,12 @@ static const int COST_TO_CHOOSE = 1;
 -(NSMutableArray *) chosenCards{
     if (!_chosenCards) _chosenCards = [[NSMutableArray alloc] init];
     return _chosenCards;
+}
+
+- (NSTimeInterval ) endGame{
+    self.endDate = [NSDate date];
+    NSTimeInterval temp = [self.endDate timeIntervalSinceDate:self.startDate];
+    return temp;
 }
 
 -(void) chooseCardAtIndex:(NSUInteger)index{
