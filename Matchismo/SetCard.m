@@ -90,17 +90,20 @@
     int score = 0;
     int partial =0;
     
-    //check for same cards
+    //list down the keys of the contents dictionary
     NSEnumerator *keyEnum = [self.contentsDictionary keyEnumerator];
     NSString *key = nil;
     while (key = (NSString*) [keyEnum nextObject]){
-        //NSLog(@"check key:%@",key);
+
+        //for each key, check if the property of the cards are the same
         partial = [self checkProperty:key OfCards:otherCards forSameValue:YES];
-        //NSLog(@"partial after check same value: %i",partial);
+
+        //if the property of the cards are not the same, check if they are all different
         if (partial != 2){
             partial = [self checkProperty:key OfCards:otherCards forSameValue:NO];
         }
-        //NSLog(@"partial after check different value: %i",partial);
+        
+        //if the property of the cards are not all the same or all diferent then reset the score to 0
         if (partial != 2){
             score = 0;
             break;
@@ -115,26 +118,27 @@
 -(int) checkProperty:(NSString*)property OfCards:(NSArray*)otherCards forSameValue:(BOOL)isSame{
     
     int score = 0;
-    //NSLog(@"predicate: %@ == %@",property,self.contentsDictionary[property]);
+
+    //filter the array of remaining cards for the same property
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@" self.%@ == %@",property,self.contentsDictionary[property]];
     NSArray* filteredArray = [otherCards filteredArrayUsingPredicate:predicate];
-    //NSLog(@"filtered array count:%i, otherCards count:%i",filteredArray.count,otherCards.count);
+    //if all the elements of the array has a property similar to the card
     if (isSame && (filteredArray.count == otherCards.count)){
-        score = 1;
-        //NSLog(@"1score:%i",score);
-        if (otherCards.count == 2){
-            //NSLog(@"check 2 cards");
-            score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
-            //NSLog(@"2score:%i",score);
-        }
+        score = 2;
+
+//        if (otherCards.count == 2){
+//            //check if the 2 cards in the array are also have matching property
+//            score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
+//        }
         
-    }else if (!isSame && (filteredArray.count == 0)){
+    }
+    //if all the elements of the array has a property different from that of the card
+    else if (!isSame && (filteredArray.count == 0)){
         score = 1;
-        //NSLog(@"1score:%i",score);
+
         if (otherCards.count == 2){
-            //NSLog(@"check 2 cards");
+            //check if the 2 cards in the array also have different properties
             score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
-            //NSLog(@"2score:%i",score);
         }
     }
     

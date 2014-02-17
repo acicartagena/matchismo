@@ -31,6 +31,8 @@
 		54B6D03D1889015200578DAC /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D03C1889015200578DAC /* SetCard.m */; };
 		54B6D0401889017900578DAC /* SetCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D03F1889017900578DAC /* SetCardDeck.m */; };
 		54B6D046188912BA00578DAC /* SetCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D045188912BA00578DAC /* SetCardGameViewController.m */; };
+		600F935518A7E2C400E43860 /* ScoreDataTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 600F935418A7E2C400E43860 /* ScoreDataTableCell.m */; };
+		600F935818A7E43F00E43860 /* HighScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 600F935718A7E43F00E43860 /* HighScoresViewController.m */; };
 		6072CD04188D699C00F5D2CB /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6072CD03188D699C00F5D2CB /* HistoryViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +86,10 @@
 		54B6D03F1889017900578DAC /* SetCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardDeck.m; sourceTree = "<group>"; };
 		54B6D044188912BA00578DAC /* SetCardGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardGameViewController.h; sourceTree = "<group>"; };
 		54B6D045188912BA00578DAC /* SetCardGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardGameViewController.m; sourceTree = "<group>"; };
+		600F935318A7E2C400E43860 /* ScoreDataTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreDataTableCell.h; sourceTree = "<group>"; };
+		600F935418A7E2C400E43860 /* ScoreDataTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreDataTableCell.m; sourceTree = "<group>"; };
+		600F935618A7E43F00E43860 /* HighScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighScoresViewController.h; sourceTree = "<group>"; };
+		600F935718A7E43F00E43860 /* HighScoresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HighScoresViewController.m; sourceTree = "<group>"; };
 		6072CD02188D699C00F5D2CB /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
 		6072CD03188D699C00F5D2CB /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,7 +171,7 @@
 				5428F3CB188788FB00BBFE8F /* 3rdParty Frameworks */,
 				547838AB188633F100780AF6 /* Model */,
 				54B6D03A1888FEE200578DAC /* Controller */,
-				5439FF3B18861D96006CC0A7 /* Main.storyboard */,
+				600F935218A7E26D00E43860 /* View */,
 				5439FF4118861D96006CC0A7 /* Images.xcassets */,
 				5439FF3018861D96006CC0A7 /* Supporting Files */,
 			);
@@ -235,8 +241,20 @@
 				54B6D045188912BA00578DAC /* SetCardGameViewController.m */,
 				6072CD02188D699C00F5D2CB /* HistoryViewController.h */,
 				6072CD03188D699C00F5D2CB /* HistoryViewController.m */,
+				600F935618A7E43F00E43860 /* HighScoresViewController.h */,
+				600F935718A7E43F00E43860 /* HighScoresViewController.m */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		600F935218A7E26D00E43860 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				600F935318A7E2C400E43860 /* ScoreDataTableCell.h */,
+				600F935418A7E2C400E43860 /* ScoreDataTableCell.m */,
+				5439FF3B18861D96006CC0A7 /* Main.storyboard */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,10 +360,12 @@
 				5439FF66188621A5006CC0A7 /* PlayingCard.m in Sources */,
 				5439FF6318861F1A006CC0A7 /* Deck.m in Sources */,
 				54B6D046188912BA00578DAC /* SetCardGameViewController.m in Sources */,
+				600F935818A7E43F00E43860 /* HighScoresViewController.m in Sources */,
 				5439FF4018861D96006CC0A7 /* ViewController.m in Sources */,
 				54B6D0391888FED500578DAC /* PlayingCardGameViewController.m in Sources */,
 				6072CD04188D699C00F5D2CB /* HistoryViewController.m in Sources */,
 				5428F3CF1887896D00BBFE8F /* UIAlertView+Blocks.m in Sources */,
+				600F935518A7E2C400E43860 /* ScoreDataTableCell.m in Sources */,
 				54B6D03D1889015200578DAC /* SetCard.m in Sources */,
 				5439FF3A18861D96006CC0A7 /* AppDelegate.m in Sources */,
 				547838AE1886385500780AF6 /* CardMatchingGame.m in Sources */,
@@ -480,10 +500,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchismo/Matchismo-Prefix.pch";
 				INFOPLIST_FILE = "Matchismo/Matchismo-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -494,10 +516,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchismo/Matchismo-Prefix.pch";
 				INFOPLIST_FILE = "Matchismo/Matchismo-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -22,6 +22,13 @@ typedef void (^UIAlertViewCompletionBlock) (UIAlertView *alertView, NSInteger bu
 
 + (void)showWithTitle:(NSString *)title
               message:(NSString *)message
+ textFieldPlaceholder:(NSString *)placeholder
+    cancelButtonTitle: (NSString *)cancelButtonTitle
+    otherButtonTitles:(NSArray *)otherButtonTitles
+             tapBlock:(UIAlertViewCompletionBlock)tapBlock;
+
++ (void)showWithTitle:(NSString *)title
+              message:(NSString *)message
     cancelButtonTitle:(NSString *)cancelButtonTitle
     otherButtonTitles:(NSArray *)otherButtonTitles
              tapBlock:(UIAlertViewCompletionBlock)tapBlock;
