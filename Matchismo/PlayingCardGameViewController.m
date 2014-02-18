@@ -16,13 +16,20 @@
 @implementation PlayingCardGameViewController
 
 -(Deck*) createDeck{
+    
     return [[PlayingCardDeck alloc] init];
     
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
     self.gameType = GAME_TYPE_PLAY;
+}
+
+- (void)updateCardUI:(Card *)card
+{
+    
 }
 
 @end

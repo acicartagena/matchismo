@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Deck.h"
 #import "CardMatchingGame.h"
+#import "CardView.h"
 
 #define ALERT_OK_BUTTON @"ok"
 #define ALERT_CANCEL_BUTTON @"nope"
@@ -31,7 +32,7 @@
 
 #define SAVE_KEY @"scoreData"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <CardViewDelegate>
 
 @property (strong, readonly, nonatomic) CardMatchingGame *game;
 @property (strong, readonly, nonatomic) NSMutableArray *gameHistory;

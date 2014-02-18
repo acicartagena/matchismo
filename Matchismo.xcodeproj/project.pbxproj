@@ -31,6 +31,8 @@
 		54B6D03D1889015200578DAC /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D03C1889015200578DAC /* SetCard.m */; };
 		54B6D0401889017900578DAC /* SetCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D03F1889017900578DAC /* SetCardDeck.m */; };
 		54B6D046188912BA00578DAC /* SetCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54B6D045188912BA00578DAC /* SetCardGameViewController.m */; };
+		55861FB318B1AC6600C292FE /* PlayingCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55861FB218B1AC6600C292FE /* PlayingCardView.m */; };
+		55861FB618B1AC8200C292FE /* CardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55861FB518B1AC8200C292FE /* CardView.m */; };
 		600F935518A7E2C400E43860 /* ScoreDataTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 600F935418A7E2C400E43860 /* ScoreDataTableCell.m */; };
 		600F935818A7E43F00E43860 /* HighScoresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 600F935718A7E43F00E43860 /* HighScoresViewController.m */; };
 		6072CD04188D699C00F5D2CB /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6072CD03188D699C00F5D2CB /* HistoryViewController.m */; };
@@ -86,6 +88,10 @@
 		54B6D03F1889017900578DAC /* SetCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardDeck.m; sourceTree = "<group>"; };
 		54B6D044188912BA00578DAC /* SetCardGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardGameViewController.h; sourceTree = "<group>"; };
 		54B6D045188912BA00578DAC /* SetCardGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardGameViewController.m; sourceTree = "<group>"; };
+		55861FB118B1AC6600C292FE /* PlayingCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCardView.h; sourceTree = "<group>"; };
+		55861FB218B1AC6600C292FE /* PlayingCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCardView.m; sourceTree = "<group>"; };
+		55861FB418B1AC8200C292FE /* CardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardView.h; sourceTree = "<group>"; };
+		55861FB518B1AC8200C292FE /* CardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardView.m; sourceTree = "<group>"; };
 		600F935318A7E2C400E43860 /* ScoreDataTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreDataTableCell.h; sourceTree = "<group>"; };
 		600F935418A7E2C400E43860 /* ScoreDataTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScoreDataTableCell.m; sourceTree = "<group>"; };
 		600F935618A7E43F00E43860 /* HighScoresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighScoresViewController.h; sourceTree = "<group>"; };
@@ -250,6 +256,10 @@
 		600F935218A7E26D00E43860 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				55861FB418B1AC8200C292FE /* CardView.h */,
+				55861FB518B1AC8200C292FE /* CardView.m */,
+				55861FB118B1AC6600C292FE /* PlayingCardView.h */,
+				55861FB218B1AC6600C292FE /* PlayingCardView.m */,
 				600F935318A7E2C400E43860 /* ScoreDataTableCell.h */,
 				600F935418A7E2C400E43860 /* ScoreDataTableCell.m */,
 				5439FF3B18861D96006CC0A7 /* Main.storyboard */,
@@ -363,11 +373,13 @@
 				600F935818A7E43F00E43860 /* HighScoresViewController.m in Sources */,
 				5439FF4018861D96006CC0A7 /* ViewController.m in Sources */,
 				54B6D0391888FED500578DAC /* PlayingCardGameViewController.m in Sources */,
+				55861FB618B1AC8200C292FE /* CardView.m in Sources */,
 				6072CD04188D699C00F5D2CB /* HistoryViewController.m in Sources */,
 				5428F3CF1887896D00BBFE8F /* UIAlertView+Blocks.m in Sources */,
 				600F935518A7E2C400E43860 /* ScoreDataTableCell.m in Sources */,
 				54B6D03D1889015200578DAC /* SetCard.m in Sources */,
 				5439FF3A18861D96006CC0A7 /* AppDelegate.m in Sources */,
+				55861FB318B1AC6600C292FE /* PlayingCardView.m in Sources */,
 				547838AE1886385500780AF6 /* CardMatchingGame.m in Sources */,
 				5439FF69188628D6006CC0A7 /* PlayingCardDeck.m in Sources */,
 				54B6D0401889017900578DAC /* SetCardDeck.m in Sources */,
