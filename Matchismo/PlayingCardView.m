@@ -10,6 +10,7 @@
 
 @interface PlayingCardView()
 @property (nonatomic) CGFloat faceCardScaleFactor;
+
 @end
 
 @implementation PlayingCardView
@@ -50,6 +51,8 @@
     [self setNeedsDisplay];
 }
 
+
+
 - (NSString *)rankAsString
 {
     return @[@"?",@"A",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"J",@"Q",@"K"][self.rank];
@@ -85,7 +88,8 @@
     [roundedRect addClip];
     
     [[UIColor whiteColor] setFill];
-    UIRectFill(self.bounds);
+    [roundedRect fillWithBlendMode:kCGBlendModeNormal alpha:self.enable ? 1.0f:0.5f];
+    //UIRectFill(self.bounds);
     
     [[UIColor blackColor] setStroke];
     [roundedRect stroke];
@@ -103,7 +107,7 @@
         
         [self drawCorners];
     } else {
-        [[UIImage imageNamed:@"cardback"] drawInRect:self.bounds];
+        [[UIImage imageNamed:@"cardBack"] drawInRect:self.bounds];
     }
 }
 

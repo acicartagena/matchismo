@@ -10,6 +10,9 @@
 #import "UIAlertView+Blocks.h"
 #import "HistoryViewController.h"
 
+#import "PlayingCardView.h"
+#import "PlayingCard.h"
+
 
 
 @interface ViewController ()
@@ -233,7 +236,7 @@
         Card *card = [self.game cardAtIndex:cardViewIndex];
         NSString *title = [self titleForCard:card];
         
-        [self updateCardUI:card];
+        [self updateView:cardView forCard:card];
         //face up/facdown logic
 //        [cardButton setTitle:title forState:UIControlStateNormal];
 //        [cardButton setAttributedTitle:[self attributedTitleForCard:card] forState:UIControlStateNormal];
@@ -250,8 +253,9 @@
     [self updateMatchStatusType];
 }
 
-- (void)updateCardUI:(Card *)card
+- (void)updateView:(CardView *)cardView forCard:(Card *)card
 {
+    //implement in cardGameController sub class
     return;
 }
 

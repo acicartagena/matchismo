@@ -17,5 +17,6 @@
 @interface CardView : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic,weak) id<CardViewDelegate> delegate;
+@property (nonatomic) BOOL enable;
 
 @end

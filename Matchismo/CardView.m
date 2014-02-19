@@ -34,6 +34,12 @@
     [self.delegate cardSelected:self];
 }
 
+- (void)setEnable:(BOOL)enable
+{
+    _enable = enable;
+    [self setNeedsDisplay];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

@@ -43,6 +43,7 @@
 
 -(Deck *)createDeck;//abstract method for subclassing
 -(void) updateUI;
+- (void)updateView:(CardView *)cardView forCard:(Card *)card;
 
 
 @end

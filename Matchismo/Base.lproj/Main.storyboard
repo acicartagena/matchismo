@@ -186,6 +186,7 @@
                         <outletCollection property="cardViews" destination="WHH-1B-XCB" id="LPm-sg-ndf"/>
                         <outletCollection property="cardViews" destination="dsB-bn-MCu" id="9mR-H4-fpV"/>
                         <outletCollection property="cardViews" destination="jHB-os-7Bm" id="cl7-g8-csq"/>
+                        <outletCollection property="cardViews" destination="uqz-Gr-htJ" id="KqZ-OZ-IJU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
