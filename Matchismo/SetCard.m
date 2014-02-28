@@ -27,7 +27,7 @@
 }
 
 +(NSArray*) validSymbols{
-    return @[@"▲",@"●",@"■"];
+    return @[@"▲",@"●",@"~"];
 }
 
 +(NSArray*) validShades{

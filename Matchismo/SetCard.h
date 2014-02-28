@@ -25,6 +25,18 @@ typedef enum SetCardShadingTypes{
 } SetCardShadingType;
 @property (nonatomic) SetCardShadingType shading;
 
+typedef enum SetCardColorTypes{
+    SetCardColorRed,
+    SetCardColorGreen,
+    SetCardColorPurple
+} SetCardColorType;
+
+typedef enum SetCardShapeTypes{
+    SetCardShapeDiamond,
+    SetCardShapeOval,
+    SetCardShapeSquiggle
+} SetCardShapeType;
+
 +(NSUInteger) maxRank;
 +(NSArray *) validSymbols;
 +(NSArray *) validColors;
