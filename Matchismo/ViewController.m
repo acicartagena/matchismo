@@ -229,12 +229,15 @@
     
     NSUInteger chosenButtonIndex = [self.cardViews indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    [self updateUI];
+    [self updateView:(CardView *)sender forCard:(Card*)[self.game cardAtIndex:chosenButtonIndex]];
+    
+    
     
     switch (self.game.matchStatus) {
         case MatchStatusTypeMatchFound:
         case MatchStatusTypeMatchNotFound:
         case MatchStatusTypePreviouslyMatched:
+            [self updateUI];
             [self.activeCardViews removeAllObjects];
             break;
             
@@ -256,27 +259,35 @@
 
 
 - (void)updateUI{
-    //NSLog(@"update ui");
-    for (CardView *cardView in self.activeCardViews){
-        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
-        Card *card = [self.game cardAtIndex:cardViewIndex];
-        NSString *title = [self titleForCard:card];
-        
-        [self updateView:cardView forCard:card];
-        //face up/facdown logic
-//        [cardButton setTitle:title forState:UIControlStateNormal];
-//        [cardButton setAttributedTitle:[self attributedTitleForCard:card] forState:UIControlStateNormal];
-//        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
-//        cardButton.enabled = !card.isMatched;
-        
-        //add current index to array of matched cards index
-        if (card.isMatched){
-            [self.indexOfMatchedCards addObject:@(cardViewIndex)];
-        }
-    }
+//    //NSLog(@"update ui");
+//    for (CardView *cardView in self.activeCardViews){
+//        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
+//        Card *card = [self.game cardAtIndex:cardViewIndex];
+//        NSString *title = [self titleForCard:card];
+//        
+//        [self updateView:cardView forCard:card];
+//        
+//        //add current index to array of matched cards index
+//        if (card.isMatched){
+//            [self.indexOfMatchedCards addObject:@(cardViewIndex)];
+//        }
+//    }
+    
+    [self performSelector:@selector(updateCardsView) withObject:self afterDelay:1.5f];
     
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
     [self updateMatchStatusType];
+}
+
+- (void)updateCardsView
+{
+    for (CardView *cardView in self.cardViews){
+        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
+        Card *card = [self.game cardAtIndex:cardViewIndex];
+        
+        [self updateView:cardView forCard:card];
+        
+    }
 }
 
 - (void)updateView:(CardView *)cardView forCard:(Card *)card

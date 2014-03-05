@@ -52,6 +52,7 @@
     [self setNeedsDisplay];
     
     if (_faceUp != _previousFaceUp){
+        _previousFaceUp = _faceUp;
         [PlayingCardView transitionWithView:self duration:0.75f options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:nil];
     }
 }
