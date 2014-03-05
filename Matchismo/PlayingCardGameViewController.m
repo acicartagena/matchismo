@@ -30,15 +30,25 @@
     self.gameType = GAME_TYPE_PLAY;
 }
 
-- (void)updateView:(CardView *)cardView forCard:(Card *)card
+- (void)updateCardView:(CardView *)cardView forCard:(Card *)card
 {
     PlayingCard* playingCard = (PlayingCard *)card;
     PlayingCardView *playingCardView = (PlayingCardView *)cardView;
-
-    [playingCardView setEnable:!card.isMatched];
+    
     [playingCardView setRank:playingCard.rank];
     [playingCardView setSuit:playingCard.suit];
     [playingCardView setFaceUp:card.isChosen?YES:NO];
+    [playingCardView setEnable:YES];
+}
+
+- (void)updateView:(CardView *)cardView forCard:(Card *)card
+{
+
+    PlayingCard* playingCard = (PlayingCard *)card;
+    PlayingCardView *playingCardView = (PlayingCardView *)cardView;
+
+    [self updateCardView:playingCardView forCard:playingCard];
+    [playingCardView setEnable:!card.isMatched];
 }
 
 @end

@@ -128,6 +128,7 @@ static const int COST_TO_CHOOSE = 1;
             self.matchStatus = MatchStatusTypeMatchNotFound;
         }
         card.chosen = YES;
+        
     }
 
     

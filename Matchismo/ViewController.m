@@ -19,6 +19,7 @@
 
 @property (strong, nonatomic) IBOutletCollection(CardView) NSArray *cardViews;//contain all UIButtons in random order
 @property (strong, nonatomic) NSMutableArray *activeCardViews;
+@property (strong, nonatomic) Card *activeCard;
 
 @property (strong, readwrite, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
@@ -229,14 +230,13 @@
     
     NSUInteger chosenButtonIndex = [self.cardViews indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    [self updateView:(CardView *)sender forCard:(Card*)[self.game cardAtIndex:chosenButtonIndex]];
     
-    
+    self.activeCard =[self.game cardAtIndex:chosenButtonIndex];
+    [self updateCardView:(CardView *)sender forCard:self.activeCard];
     
     switch (self.game.matchStatus) {
         case MatchStatusTypeMatchFound:
         case MatchStatusTypeMatchNotFound:
-        case MatchStatusTypePreviouslyMatched:
             [self updateUI];
             [self.activeCardViews removeAllObjects];
             break;
@@ -259,19 +259,6 @@
 
 
 - (void)updateUI{
-//    //NSLog(@"update ui");
-//    for (CardView *cardView in self.activeCardViews){
-//        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
-//        Card *card = [self.game cardAtIndex:cardViewIndex];
-//        NSString *title = [self titleForCard:card];
-//        
-//        [self updateView:cardView forCard:card];
-//        
-//        //add current index to array of matched cards index
-//        if (card.isMatched){
-//            [self.indexOfMatchedCards addObject:@(cardViewIndex)];
-//        }
-//    }
     
     [self performSelector:@selector(updateCardsView) withObject:self afterDelay:1.5f];
     
@@ -285,9 +272,13 @@
         NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
         Card *card = [self.game cardAtIndex:cardViewIndex];
         
+        if (card == self.activeCard && !card.isMatched){
+            self.activeCard.chosen = NO;
+        }
         [self updateView:cardView forCard:card];
-        
     }
+    self.statusLabel.text = @"";
+    self.activeCard = nil;
 }
 
 - (void)updateView:(CardView *)cardView forCard:(Card *)card
