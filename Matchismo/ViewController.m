@@ -18,6 +18,7 @@
 @interface ViewController ()
 
 @property (strong, nonatomic) IBOutletCollection(CardView) NSArray *cardViews;//contain all UIButtons in random order
+@property (strong, nonatomic) NSMutableArray *activeCardViews;
 
 @property (strong, readwrite, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
@@ -42,6 +43,8 @@
 
 @implementation ViewController
 
+#pragma mark - lifecyle
+
 -(void) viewDidAppear:(BOOL)animated
 {
 
@@ -64,28 +67,45 @@
                                                   object:nil];
 }
 
-#pragma mark - Game Control
+#pragma mark - lazy loading
 
--(CardMatchingGame *)game{
+- (CardMatchingGame *)game
+{
     if (!_game){
         _game = [[CardMatchingGame alloc] initWithCardCount:[[self cardViews] count] usingDeck:[self createDeck]];
     }
     return _game;
 }
 
--(Deck *)createDeck{
-//    return [[PlayingCardDeck alloc] init];
-    return nil;
-}
-
--(NSMutableSet *) indexOfMatchedCards{
-    if (!_indexOfMatchedCards) _indexOfMatchedCards = [[NSMutableSet alloc] init];
+- (NSMutableSet *)indexOfMatchedCards
+{
+    if (!_indexOfMatchedCards){
+        _indexOfMatchedCards = [[NSMutableSet alloc] init];
+    }
     return _indexOfMatchedCards;
 }
 
--(NSMutableArray *) gameHistory{
-    if (!_gameHistory) _gameHistory = [[NSMutableArray alloc] init];
+- (NSMutableArray *)gameHistory
+{
+    if (!_gameHistory){
+        _gameHistory = [[NSMutableArray alloc] init];
+    }
     return _gameHistory;
+}
+
+- (NSMutableArray *)activeCardViews
+{
+    if (!_activeCardViews){
+        _activeCardViews = [[NSMutableArray alloc] init];
+    }
+    return _activeCardViews;
+}
+
+#pragma mark - Game Control
+
+-(Deck *)createDeck{
+//    return [[PlayingCardDeck alloc] init];
+    return nil;
 }
 
 - (IBAction)startNewGame {
@@ -201,20 +221,28 @@
 
 #pragma mark - Game UI
 - (void)cardSelected:(id)sender{
-//TODO- update action to gesture recognizer selector
-//- (IBAction)touchCardButton:(UIButton *)sender {
     
     if (self.isGameEnded)
         return;
-    
-//    [[self cardMatchModeSegControl] setEnabled:NO];
+    //add view to active cardviews
+    [self.activeCardViews addObject:sender];
     
     NSUInteger chosenButtonIndex = [self.cardViews indexOfObject:sender];
     [self.game chooseCardAtIndex:chosenButtonIndex];
     [self updateUI];
     
+    switch (self.game.matchStatus) {
+        case MatchStatusTypeMatchFound:
+        case MatchStatusTypeMatchNotFound:
+        case MatchStatusTypePreviouslyMatched:
+            [self.activeCardViews removeAllObjects];
+            break;
+            
+        default:
+            break;
+    }
     //update game history
-    [self updateGameHistoryWithChosenCard:chosenButtonIndex];
+//    [self updateGameHistoryWithChosenCard:chosenButtonIndex];
 
 }
 
@@ -223,15 +251,13 @@
     NSLog(@"status label attributed text:%@",self.statusLabel.attributedText);
     if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
         [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text?self.statusLabel.text:self.statusLabel.attributedText, SCORE_KEY:@(self.game.score)}];
-        //        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
     }
-    //    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
 }
 
 
 - (void)updateUI{
     //NSLog(@"update ui");
-    for (CardView *cardView in self.cardViews){
+    for (CardView *cardView in self.activeCardViews){
         NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
         Card *card = [self.game cardAtIndex:cardViewIndex];
         NSString *title = [self titleForCard:card];

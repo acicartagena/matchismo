@@ -34,7 +34,7 @@
 {
     PlayingCard* playingCard = (PlayingCard *)card;
     PlayingCardView *playingCardView = (PlayingCardView *)cardView;
-    
+
     [playingCardView setEnable:!card.isMatched];
     [playingCardView setRank:playingCard.rank];
     [playingCardView setSuit:playingCard.suit];

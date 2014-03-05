@@ -10,6 +10,7 @@
 
 @interface PlayingCardView()
 @property (nonatomic) CGFloat faceCardScaleFactor;
+@property (nonatomic) BOOL previousFaceUp;
 
 @end
 
@@ -49,6 +50,10 @@
 {
     _faceUp = faceUp;
     [self setNeedsDisplay];
+    
+    if (_faceUp != _previousFaceUp){
+        [PlayingCardView transitionWithView:self duration:0.75f options:UIViewAnimationOptionTransitionFlipFromRight animations:nil completion:nil];
+    }
 }
 
 
@@ -227,6 +232,7 @@
     self.backgroundColor = nil;
     self.opaque = NO;
     self.contentMode = UIViewContentModeRedraw;
+    self.previousFaceUp = NO;
 }
 
 - (void)awakeFromNib
