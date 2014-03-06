@@ -10,23 +10,29 @@
 
 @implementation CardView
 
+
+
++ (CGFloat)cardViewDefaultAspectRatio
+{
+    return DEFAULT_CARD_WIDTH/DEFAULT_CARD_HEIGHT;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.frame = CGRectMake(frame.origin.x, frame.origin.y, DEFAULT_CARD_WIDTH, DEFAULT_CARD_HEIGHT);
+        self.backgroundColor = [UIColor whiteColor];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCard:)];
+        tap.numberOfTapsRequired = 1;
+        tap.numberOfTouchesRequired = 1;
+        [self addGestureRecognizer:tap];
+        tap.delegate = self;
+        
     }
     return self;
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview
-{
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCard:)];
-    tap.numberOfTapsRequired = 1;
-    tap.numberOfTouchesRequired = 1;
-    [self addGestureRecognizer:tap];
-    tap.delegate = self;
-
 }
 
 - (void)tapCard:(UIGestureRecognizer *)tapGestureRecognizer

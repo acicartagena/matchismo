@@ -23,13 +23,6 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="bcJ-ig-RH4">
-                                <rect key="frame" x="20" y="387" width="280" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NPf-Kb-b60">
                                 <rect key="frame" x="20" y="72" width="83" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -54,139 +47,18 @@
                                     <action selector="endCurrentGame:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="CGF-Rd-LeK"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhO-qP-LLR" customClass="PlayingCardView">
-                                <rect key="frame" x="68" y="115" width="40" height="60"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0EH-3z-0w5">
+                                <rect key="frame" x="0.0" y="110" width="320" height="308"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GHH-5d-U6x" customClass="PlayingCardView">
-                                <rect key="frame" x="116" y="115" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTP-gg-FuM" customClass="PlayingCardView">
-                                <rect key="frame" x="164" y="115" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqz-Gr-htJ" customClass="PlayingCardView">
-                                <rect key="frame" x="212" y="115" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HNO-a1-9i0" customClass="PlayingCardView">
-                                <rect key="frame" x="68" y="183" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5t3-42-6xo" customClass="PlayingCardView">
-                                <rect key="frame" x="20" y="183" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NTj-WG-9EA" customClass="PlayingCardView">
-                                <rect key="frame" x="260" y="183" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SA0-zC-WZ4" customClass="PlayingCardView">
-                                <rect key="frame" x="116" y="183" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SMA-XC-BcO" customClass="PlayingCardView">
-                                <rect key="frame" x="164" y="183" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CGL-nJ-CV3" customClass="PlayingCardView">
-                                <rect key="frame" x="212" y="183" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCR-8Q-S2U" customClass="PlayingCardView">
-                                <rect key="frame" x="68" y="251" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xqf-cQ-6P9" customClass="PlayingCardView">
-                                <rect key="frame" x="20" y="251" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q8W-FU-gOE" customClass="PlayingCardView">
-                                <rect key="frame" x="260" y="251" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ebE-71-P2q" customClass="PlayingCardView">
-                                <rect key="frame" x="116" y="251" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Efl-nD-rtC" customClass="PlayingCardView">
-                                <rect key="frame" x="164" y="251" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d8W-La-UEt" customClass="PlayingCardView">
-                                <rect key="frame" x="212" y="251" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SNo-Ip-nba" customClass="PlayingCardView">
-                                <rect key="frame" x="68" y="319" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WHH-1B-XCB" customClass="PlayingCardView">
-                                <rect key="frame" x="116" y="319" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsB-bn-MCu" customClass="PlayingCardView">
-                                <rect key="frame" x="164" y="319" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jHB-os-7Bm" customClass="PlayingCardView">
-                                <rect key="frame" x="212" y="319" width="40" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="0.25098040699958801" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Playing Card" id="Uig-iz-AAU">
-                        <barButtonItem key="rightBarButtonItem" title="History" id="EzI-iv-3B8">
-                            <connections>
-                                <segue destination="Ta8-VI-L4v" kind="push" identifier="playingToHistory" id="KRX-l0-7bJ"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Playing Card" id="Uig-iz-AAU"/>
                     <connections>
+                        <outlet property="gameCardsView" destination="0EH-3z-0w5" id="WvD-qG-jzK"/>
                         <outlet property="scoreLabel" destination="yNx-3w-5mw" id="HBM-zI-HsL"/>
-                        <outlet property="statusLabel" destination="bcJ-ig-RH4" id="NTY-8O-8wu"/>
-                        <outletCollection property="cardViews" destination="uhO-qP-LLR" id="9yz-e7-GdC"/>
-                        <outletCollection property="cardViews" destination="GHH-5d-U6x" id="jZq-rH-kU9"/>
-                        <outletCollection property="cardViews" destination="UTP-gg-FuM" id="wt0-oa-twk"/>
-                        <outletCollection property="cardViews" destination="5t3-42-6xo" id="i9E-1Y-WBc"/>
-                        <outletCollection property="cardViews" destination="HNO-a1-9i0" id="81P-l5-3M7"/>
-                        <outletCollection property="cardViews" destination="SA0-zC-WZ4" id="Sm6-eH-FZ3"/>
-                        <outletCollection property="cardViews" destination="SMA-XC-BcO" id="U0I-Li-YZ0"/>
-                        <outletCollection property="cardViews" destination="CGL-nJ-CV3" id="FS3-i3-p1Z"/>
-                        <outletCollection property="cardViews" destination="NTj-WG-9EA" id="2Cp-Pe-BdD"/>
-                        <outletCollection property="cardViews" destination="xqf-cQ-6P9" id="egq-1y-24N"/>
-                        <outletCollection property="cardViews" destination="BCR-8Q-S2U" id="kP8-A6-uOo"/>
-                        <outletCollection property="cardViews" destination="ebE-71-P2q" id="jFu-aa-3N6"/>
-                        <outletCollection property="cardViews" destination="Efl-nD-rtC" id="Efc-nX-3mI"/>
-                        <outletCollection property="cardViews" destination="d8W-La-UEt" id="Csx-yt-NDb"/>
-                        <outletCollection property="cardViews" destination="Q8W-FU-gOE" id="Y6g-No-Zd4"/>
-                        <outletCollection property="cardViews" destination="SNo-Ip-nba" id="uKQ-x2-EVr"/>
-                        <outletCollection property="cardViews" destination="WHH-1B-XCB" id="LPm-sg-ndf"/>
-                        <outletCollection property="cardViews" destination="dsB-bn-MCu" id="9mR-H4-fpV"/>
-                        <outletCollection property="cardViews" destination="jHB-os-7Bm" id="cl7-g8-csq"/>
-                        <outletCollection property="cardViews" destination="uqz-Gr-htJ" id="KqZ-OZ-IJU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -202,11 +74,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Ymh-n5-Hcf"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="dt3-HR-wnu">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="431"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dle-4j-7iO">
-                                <rect key="frame" x="0.0" y="67" width="320" height="364"/>
+                                <rect key="frame" x="0.0" y="67" width="320" height="413"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -267,13 +139,6 @@
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score:0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEw-hz-nQQ">
                                 <rect key="frame" x="223" y="86" width="97" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="gju-kl-kUX">
-                                <rect key="frame" x="20" y="403" width="280" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -515,17 +380,10 @@
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Set Card Game" id="06E-st-pyg">
-                        <barButtonItem key="rightBarButtonItem" title="History" id="Yc9-vN-sKU">
-                            <connections>
-                                <segue destination="Ta8-VI-L4v" kind="push" identifier="setToHistory" id="QP2-HE-W33"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Set Card Game" id="06E-st-pyg"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="scoreLabel" destination="pEw-hz-nQQ" id="EQi-ou-D70"/>
-                        <outlet property="statusLabel" destination="gju-kl-kUX" id="Xt9-P8-1bH"/>
                         <outletCollection property="cardButtons" destination="snY-7m-phA" id="Pg6-FG-yba"/>
                         <outletCollection property="cardButtons" destination="snY-7m-phA" id="nTY-jx-kks"/>
                         <outletCollection property="cardButtons" destination="zgL-GQ-l82" id="smA-TA-m1e"/>
@@ -685,7 +543,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="KRX-l0-7bJ"/>
-    </inferredMetricsTieBreakers>
 </document>

@@ -122,8 +122,6 @@ static const int COST_TO_CHOOSE = 1;
             
             //clean up array of chosen cards
             self.chosenCards = nil;
-            //add current object to the chosen cards array (since it is still chosen)
-            [self.chosenCards addObject:card];
             
             self.matchStatus = MatchStatusTypeMatchNotFound;
         }

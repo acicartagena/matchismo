@@ -10,6 +10,7 @@
 #import "Deck.h"
 #import "CardMatchingGame.h"
 #import "CardView.h"
+#import "Grid.h"
 
 #define ALERT_OK_BUTTON @"ok"
 #define ALERT_CANCEL_BUTTON @"nope"
@@ -34,18 +35,19 @@
 
 @interface ViewController : UIViewController <CardViewDelegate>
 
-@property (strong, readonly, nonatomic) CardMatchingGame *game;
-@property (strong, readonly, nonatomic) NSMutableArray *gameHistory;
-@property (strong, readonly, nonatomic) NSMutableSet *indexOfMatchedCards;
-@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (strong, nonatomic) NSString *gameType;
+@property (strong, nonatomic) CardMatchingGame *game;
+@property (strong, nonatomic) NSMutableArray *cardViews;
+@property (weak, nonatomic) IBOutlet UIView *gameCardsView;
+@property (strong, nonatomic) Grid *grid;
 
+- (Deck *)createDeck;
+- (CardMatchingGame *)createGame;
 
--(Deck *)createDeck;//abstract method for subclassing
--(void) updateUI;
+- (void)updateUINewGame;
+- (void)updateUI;
+- (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
 
-- (void)updateCardView:(CardView *)cardView forCard:(Card *)card;
-- (void)updateView:(CardView *)cardView forCard:(Card *)card;
 
 
 @end

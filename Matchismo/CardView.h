@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+static const CGFloat DEFAULT_CARD_WIDTH = 40.0f;
+static const CGFloat DEFAULT_CARD_HEIGHT = 60.0f;
+
 @protocol CardViewDelegate
 
 - (void)cardSelected:(id)sender;
@@ -18,5 +21,7 @@
 
 @property (nonatomic,weak) id<CardViewDelegate> delegate;
 @property (nonatomic) BOOL enable;
+
++ (CGFloat)cardViewDefaultAspectRatio;
 
 @end
