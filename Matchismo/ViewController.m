@@ -90,10 +90,11 @@
             [self saveGameStatistics];
             
             //reset game
-            _game = nil;
+            self.game = nil;
+            [self game];
             
             //start new game
-            [self updateUI];
+            //[self updateUI];
             [self setGameAlreadySaved:NO];
             [self setGameEnded:NO];
             
@@ -170,16 +171,24 @@
 - (void)cardSelected:(id)sender
 {
     
-    if (self.isGameEnded)
+    if (self.isGameEnded){
         return;
+    }
     
-    if (self.waitingForAnimationFinish)
+    if (self.waitingForAnimationFinish){
         return;
+    }
     
     NSUInteger chosenButtonIndex = [self.cardViews indexOfObject:sender];
+    self.activeCard =[self.game cardAtIndex:chosenButtonIndex];
+    
+    if (self.activeCard.matched){
+        return;
+    }
+    
     [self.game chooseCardAtIndex:chosenButtonIndex];
     
-    self.activeCard =[self.game cardAtIndex:chosenButtonIndex];
+   
     [self updateView:(CardView *)sender forCard:self.activeCard defaultEnable:YES];
     
     switch (self.game.matchStatus) {
@@ -200,7 +209,6 @@
 
 - (void)updateUI
 {
-    
     self.waitingForAnimationFinish = YES;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
     
