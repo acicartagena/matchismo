@@ -43,30 +43,27 @@
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
- //   if (fromInterfaceOrientation == UIInterfaceOrientationPortrait){
-    
-        self.grid.size = self.gameCardsView.frame.size;
-        self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
-        self.grid.minimumNumberOfCells = PLAYING_CARD_COUNT;
-        
-        int x = 0;
-        for (int i=0; i<self.grid.rowCount; i++){
-            for (int j=0; j<self.grid.columnCount; j++){
-                x +=1;
-                if (x> PLAYING_CARD_COUNT){
-                    break;
-                }
-                CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-                NSLog(@"frame: x:%f y:%f width:%f height:%f",frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-                [self.cardViews[x-1] setFrame:frame];
 
-            
-            }
+    self.grid.size = self.gameCardsView.frame.size;
+    self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
+    self.grid.minimumNumberOfCells = PLAYING_CARD_COUNT;
+    
+    int x = 0;
+    for (int i=0; i<self.grid.rowCount; i++){
+        for (int j=0; j<self.grid.columnCount; j++){
+            x +=1;
             if (x> PLAYING_CARD_COUNT){
                 break;
             }
+            CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
+            NSLog(@"frame: x:%f y:%f width:%f height:%f",frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
+            [self.cardViews[x-1] setFrame:frame];
+        
         }
-   // }
+        if (x> PLAYING_CARD_COUNT){
+            break;
+        }
+    }
 }
 
 #pragma mark - overwritten methods
@@ -82,12 +79,13 @@
     if ([self.cardViews count]>0){
         [self.cardViews removeAllObjects];
     }
-    
     if ([[self.gameCardsView subviews] count]>0){
         for (UIView *cardView in [self.gameCardsView subviews]){
             [cardView removeFromSuperview];
         }
     }
+    
+    NSLog(@"center x:%f y:%f",self.view.center.x,self.view.center.y);
     
     int x = 0;
     for (int i=0; i<self.grid.rowCount; i++){
@@ -97,18 +95,27 @@
                 break;
             }
             CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-            //NSLog(@"frame: x:%f y:%f width:%f height:%f",frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-            PlayingCardView *cardView =[[PlayingCardView alloc] initWithFrame:frame];
+            PlayingCardView *cardView =[[PlayingCardView alloc] initWithFrame:CGRectMake(self.view.center.x - frame.size.width + x*1.0f, self.view.center.y - frame.size.height*2 + x*1.f, frame.size.width, frame.size.height)];
             cardView.delegate = self;
+            [UIView animateWithDuration:0.5f delay:x*0.2f options:0 animations:^{
+                cardView.frame = frame;
+            } completion:^(BOOL finished) {
+                [self.gameCardsView sendSubviewToBack:cardView];
+            }];
+    
             [self.cardViews addObject:cardView];
-            [self.gameCardsView addSubview:cardView];
+            if (x==1){
+                [self.gameCardsView addSubview:cardView];
+            }else{
+                [self.gameCardsView insertSubview:cardView belowSubview:self.cardViews[x-2]];
+            }
+
         }
         if (x> PLAYING_CARD_COUNT){
             break;
         }
     }
-    CardMatchingGame *temp =  [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count] usingDeck:[self createDeck]];
-    return temp;
+    return [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count] usingDeck:[self createDeck]];
 }
 
 - (void)updateUINewGame
