@@ -24,4 +24,10 @@ static const CGFloat DEFAULT_CARD_HEIGHT = 60.0f;
 
 + (CGFloat)cardViewDefaultAspectRatio;
 
+- (void)drawCard;
+
+- (CGFloat)cornerScaleFactor;
+- (CGFloat)cornerRadius;
+- (CGFloat)cornerOffset;
+
 @end

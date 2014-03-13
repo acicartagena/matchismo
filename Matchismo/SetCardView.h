@@ -7,7 +7,13 @@
 //
 
 #import "CardView.h"
+#import "SetCard.h"
 
 @interface SetCardView : CardView
+
+@property (nonatomic) SetCardShapeType shape;
+@property (nonatomic) SetCardColorType color;
+@property (nonatomic) SetCardShadingType shade;
+@property (nonatomic) NSInteger rank;
 
 @end

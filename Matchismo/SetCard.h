@@ -12,18 +12,11 @@
 #define GREEN_COLOR @"G"
 #define PURPLE_COLOR @"P"
 
-@interface SetCard : Card
-
-@property (nonatomic) NSUInteger rank;
-@property (strong,nonatomic) NSString *symbol;
-@property (strong,nonatomic) NSString *color;
-
 typedef enum SetCardShadingTypes{
     SetCardShadingSolid,
     SetCardShadingStriped,
     SetCardShadingOpen
 } SetCardShadingType;
-@property (nonatomic) SetCardShadingType shading;
 
 typedef enum SetCardColorTypes{
     SetCardColorRed,
@@ -37,10 +30,16 @@ typedef enum SetCardShapeTypes{
     SetCardShapeSquiggle
 } SetCardShapeType;
 
+@interface SetCard : Card
+
+@property (nonatomic) NSUInteger rank;
+@property (nonatomic) SetCardShapeType symbol;
+@property (nonatomic) SetCardColorType color;
+@property (nonatomic) SetCardShadingType shading;
+
 +(NSUInteger) maxRank;
 +(NSArray *) validSymbols;
 +(NSArray *) validColors;
 +(NSArray *) validShades;
-
 
 @end

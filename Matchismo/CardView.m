@@ -17,7 +17,11 @@
     return DEFAULT_CARD_WIDTH/DEFAULT_CARD_HEIGHT;
 }
 
-- (id)initWithFrame:(CGRect)frame
+#pragma mark - Initialization
+
+
+
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -35,6 +39,21 @@
     return self;
 }
 
+- (void)drawCard
+{
+    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
+    
+    [roundedRect addClip];
+    
+    [[UIColor whiteColor] setFill];
+    [roundedRect fillWithBlendMode:kCGBlendModeNormal alpha:self.enable ? 1.0f:0.5f];
+    //UIRectFill(self.bounds);
+    
+    [[UIColor blackColor] setStroke];
+    [roundedRect stroke];
+
+}
+
 - (void)tapCard:(UIGestureRecognizer *)tapGestureRecognizer
 {
     [self.delegate cardSelected:self];
@@ -45,6 +64,14 @@
     _enable = enable;
     [self setNeedsDisplay];
 }
+
+
+#define CORNER_FONT_STANDARD_HEIGHT 180.0
+#define CORNER_RADIUS 12.0
+
+- (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT; }
+- (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
+- (CGFloat)cornerOffset { return [self cornerRadius] / 3.0; }
 
 /*
 // Only override drawRect: if you perform custom drawing.

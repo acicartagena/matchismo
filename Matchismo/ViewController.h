@@ -47,7 +47,7 @@
 - (void)updateUINewGame;
 - (void)updateUI;
 - (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
-
+- (void)updateView:(CardView *)cardView forCard:(Card *)card;
 
 
 @end

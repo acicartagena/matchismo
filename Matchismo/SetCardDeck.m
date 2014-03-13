@@ -11,16 +11,16 @@
 
 @implementation SetCardDeck
 
--(instancetype) init{
+- (instancetype)init{
     self = [super init];
     if (self){
-        for (NSString *symbol in [SetCard validSymbols]){
-            for (NSString *color in [SetCard validColors]){
+        for (NSNumber *symbol in [SetCard validSymbols]){
+            for (NSNumber *color in [SetCard validColors]){
                 for (NSNumber *shading in [SetCard validShades]){
                     for (int i=1; i<=[SetCard maxRank];i++){
                         SetCard *card = [[SetCard alloc] init];
-                        card.symbol = symbol;
-                        card.color = color;
+                        card.symbol = [symbol integerValue];
+                        card.color = [color integerValue];
                         card.rank = i;
                         card.shading = [shading integerValue];
                         [self addCard:card];

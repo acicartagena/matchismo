@@ -18,7 +18,8 @@
 @synthesize color = _color;
 @synthesize contentsDictionary = _contentsDictionary;
 
--(instancetype) init{
+- (instancetype)init
+{
     self = [super init];
     if (self){
         
@@ -26,67 +27,41 @@
     return self;
 }
 
-+(NSArray*) validSymbols{
-    return @[@"▲",@"●",@"~"];
-}
-
-+(NSArray*) validShades{
++ (NSArray *)validShades
+{
     return @[@(SetCardShadingOpen),@(SetCardShadingStriped),@(SetCardShadingSolid)];
 }
 
-+(NSArray*) validColors{
-    return @[RED_COLOR,GREEN_COLOR,PURPLE_COLOR];
++ (NSArray *)validSymbols
+{
+    return @[@(SetCardShapeDiamond),@(SetCardShapeOval), @(SetCardShapeSquiggle)];
 }
 
-+(NSUInteger) maxRank{
++ (NSArray *)validColors
+{
+    return @[@(SetCardColorGreen), @(SetCardColorPurple), @(SetCardColorRed)];
+}
+
++ (NSUInteger)maxRank
+{
     return 3;
 }
 
--(NSDictionary*) contentsDictionary{
+-(NSDictionary*) contentsDictionary
+{
     if (!_contentsDictionary){
-        _contentsDictionary = @{@"color":self.color, @"rank":@(self.rank),@"shading":@(self.shading),@"symbol":self.symbol};
+        _contentsDictionary = @{@"color":@(self.color), @"rank":@(self.rank),@"shading":@(self.shading),@"symbol":@(self.symbol)};
     }
     return _contentsDictionary;
 }
 
-//format for contents <rank><color><symbol><shading>
--(NSString *)contents{
-    //return [NSString stringWithFormat:@"%i%@%@%i",[self rank],[self color],[self symbol],[self shading]];
-    return nil;
-}
-
--(NSAttributedString*) attributedContents{
-    NSMutableAttributedString *temp;
-    return temp;
-}
-
--(NSString *)symbol{
-    return _symbol ? _symbol:@"?";
-}
-
--(void) setSymbol:(NSString *)symbol{
-    if ([[SetCard validSymbols] containsObject:symbol]){
-        _symbol = symbol;
-    }
-}
-
--(NSString *)color{
-    return _color ? _color:@"?";
-}
-
--(void) setColor:(NSString *)color{
-    if ([[SetCard validColors] containsObject:color]){
-        _color = color;
-    }
-}
-
--(void) setRank:(NSUInteger)rank{
+- (void)setRank:(NSUInteger)rank{
     if (rank<= [SetCard maxRank]){
         _rank = rank;
     }
 }
 
--(int) match:(NSArray *)otherCards{
+- (int)match:(NSArray *)otherCards{
     int score = 0;
     int partial =0;
     

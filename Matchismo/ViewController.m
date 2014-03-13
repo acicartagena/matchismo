@@ -248,10 +248,6 @@
     return;
 }
 
-- (void)updateCardView:(CardView *)cardView forCard:(Card *)card
-{
-    return;
-}
 
 
 @end

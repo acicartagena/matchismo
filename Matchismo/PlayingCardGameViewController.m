@@ -122,7 +122,7 @@
 {
     int i=0;
     for (PlayingCardView *cardView in self.cardViews){
-        PlayingCard *card = (PlayingCard *)[self.game cardAtIndex:i];
+        PlayingCard *card = (PlayingCard *)[self.game cardAtIndex:i++];
         [self updateView:cardView forCard:card defaultEnable:NO];
     }
 }
