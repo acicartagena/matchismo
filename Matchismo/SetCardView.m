@@ -10,6 +10,11 @@
 
 @implementation SetCardView
 
++ (NSInteger)initialNumberOfCards
+{
+    return 12;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -177,8 +182,5 @@
     CGFloat height = self.bounds.size.width*0.25f;
     return CGRectMake(x,y,width,height);
 }
-
-
-
 
 @end

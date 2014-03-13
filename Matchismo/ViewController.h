@@ -35,19 +35,25 @@
 
 @interface ViewController : UIViewController <CardViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *gameCardsView;
+
 @property (strong, nonatomic) NSString *gameType;
 @property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) NSMutableArray *cardViews;
-@property (weak, nonatomic) IBOutlet UIView *gameCardsView;
 @property (strong, nonatomic) Grid *grid;
+@property (strong, nonatomic) Card *activeCard;
+
+@property (nonatomic) BOOL waitingForAnimationFinish;
+@property (nonatomic) NSInteger cardCount;
+
 
 - (Deck *)createDeck;
 - (CardMatchingGame *)createGame;
-
+- (CardMatchingGame *)createGameWithCardCount:(NSInteger)cardCount;
+- (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame;
 - (void)updateUINewGame;
-- (void)updateUI;
+- (void)updateCardsView;
 - (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
-- (void)updateView:(CardView *)cardView forCard:(Card *)card;
 
 
 @end
