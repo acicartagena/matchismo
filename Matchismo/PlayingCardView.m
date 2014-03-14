@@ -7,6 +7,7 @@
 //
 
 #import "PlayingCardView.h"
+#import "PlayingCard.h"
 
 @interface PlayingCardView()
 @property (nonatomic) CGFloat faceCardScaleFactor;
@@ -26,6 +27,16 @@
 {
     if (!_faceCardScaleFactor) _faceCardScaleFactor = DEFAULT_FACE_CARD_SCALE_FACTOR;
     return _faceCardScaleFactor;
+}
+
+- (void)setCard:(Card *)card defaultEnable:(BOOL)defaultEnable
+{
+    PlayingCard* playingCard = (PlayingCard *)card;
+    
+    [self setRank:playingCard.rank];
+    [self setSuit:playingCard.suit];
+    [self setFaceUp:card.isChosen?YES:NO];
+    [self setEnable:defaultEnable ? YES:!card.isMatched];
 }
 
 - (void)setFaceCardScaleFactor:(CGFloat)faceCardScaleFactor

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Card.h"
 
 static const CGFloat DEFAULT_CARD_WIDTH = 40.0f;
 static const CGFloat DEFAULT_CARD_HEIGHT = 60.0f;
@@ -30,5 +31,6 @@ static const CGFloat DEFAULT_CARD_HEIGHT = 60.0f;
 - (CGFloat)cornerScaleFactor;
 - (CGFloat)cornerRadius;
 - (CGFloat)cornerOffset;
+- (void)setCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
 
 @end

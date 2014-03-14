@@ -16,4 +16,5 @@
 @property (nonatomic) SetCardShadingType shade;
 @property (nonatomic) NSInteger rank;
 
+
 @end

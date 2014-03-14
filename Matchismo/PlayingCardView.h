@@ -17,5 +17,6 @@
 
 
 - (void)pinch:(UIPinchGestureRecognizer *)gesture;
+- (void)setCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
 
 @end

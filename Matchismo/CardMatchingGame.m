@@ -15,6 +15,7 @@
 @property (nonatomic,strong) NSMutableArray *cards; //of Cards
 @property (nonatomic, strong) NSDate *startDate;
 @property (nonatomic, strong) NSDate *endDate;
+@property (nonatomic, strong) Deck *deck;
 
 @end
 
@@ -25,47 +26,67 @@ static const int TWOCARD_MATCH_BONUS = 4;
 static const int THREECARD_MATCH_BONUS = 2;
 static const int COST_TO_CHOOSE = 1;
 
--(NSMutableArray *) cards{
-    if (!_cards) _cards = [[NSMutableArray alloc] init];
-    return _cards;
-}
-
--(instancetype) initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck{
+- (instancetype)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck{
     self = [super init];
     if (self){
         for (int i = 0; i<count; i++){
             Card *card = [deck drawRandomCard];
             if (card){
-                [[self cards] addObject:card];
+                [self.cards addObject:card];
             }else{
                 self = nil;
                 break;
             }
-            //set the default to 2 card match mode
-            self.numberOfCardsMatchMode = [deck numberOfCardsMatchMode];
-            self.matchStatus = MatchStatusTypeNoCardSelected;
-            self.startDate = [NSDate date];
         }
+        self.deck = deck;
+        self.numberOfCardsMatchMode = [deck numberOfCardsMatchMode];
+        self.matchStatus = MatchStatusTypeNoCardSelected;
+        self.startDate = [NSDate date];
     }
     return self;
 }
 
--(Card *) cardAtIndex:(NSUInteger)index{
-    return (index<[self.cards count]) ? [self.cards objectAtIndex:index]:nil;
+- (NSMutableArray *)cards{
+    if (!_cards) _cards = [[NSMutableArray alloc] init];
+    return _cards;
 }
 
--(NSMutableArray *) chosenCards{
+- (NSMutableArray *)chosenCards{
     if (!_chosenCards) _chosenCards = [[NSMutableArray alloc] init];
     return _chosenCards;
 }
 
-- (NSTimeInterval ) endGame{
-    self.endDate = [NSDate date];
-    NSTimeInterval temp = [self.endDate timeIntervalSinceDate:self.startDate];
-    return temp;
+- (Card *)cardAtIndex:(NSUInteger)index{
+    return (index<[self.cards count]) ? [self.cards objectAtIndex:index]:nil;
 }
 
--(void) chooseCardAtIndex:(NSUInteger)index{
+- (BOOL)drawNewCardsWithCount:(NSInteger)newCards
+{
+    for (int i=0 ;i<newCards; i++){
+        Card *card = [self.deck drawRandomCard];
+        if (card){
+            [self.cards addObject:card];
+        }else{
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (NSInteger)cardCount
+{
+    return [self.cards count];
+}
+
+//- (void)removeCard:(Card *)card
+//{
+//    if ([self.cards containsObject:card]){
+//        [self.cards removeObject:card];
+//    }
+//}
+
+
+- (void)chooseCardAtIndex:(NSUInteger)index{
     Card *card = [self cardAtIndex:index];
     
     //if card is matched, do nothing
@@ -75,7 +96,6 @@ static const int COST_TO_CHOOSE = 1;
     }
     //toggle
     if (card.isChosen){
-        self.currentCard = nil;
         card.chosen = NO;
         if ([self.chosenCards containsObject:card]){
             [self.chosenCards removeObject:card];
@@ -83,7 +103,6 @@ static const int COST_TO_CHOOSE = 1;
         self.matchStatus = MatchStatusTypeNoCardSelected;
         return;
     }
-    self.currentCard = card;
 
     self.matchStatus = MatchStatusTypeNotEnoughMoves;
     [[NSNotificationCenter defaultCenter] postNotificationName:MatchStatusTypeChangedNotification object:nil];
@@ -110,7 +129,6 @@ static const int COST_TO_CHOOSE = 1;
             
             //clean up array of chosen cards
             self.chosenCards = nil;
-            
             self.matchStatus = MatchStatusTypeMatchFound;
         }else{
             self.score -= MISMATCH_PENALTY;
@@ -122,13 +140,15 @@ static const int COST_TO_CHOOSE = 1;
             
             //clean up array of chosen cards
             self.chosenCards = nil;
-            
             self.matchStatus = MatchStatusTypeMatchNotFound;
         }
         card.chosen = YES;
-        
     }
+}
 
-    
+- (NSTimeInterval)endGame{
+    self.endDate = [NSDate date];
+    NSTimeInterval temp = [self.endDate timeIntervalSinceDate:self.startDate];
+    return temp;
 }
 @end

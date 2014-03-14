@@ -110,10 +110,15 @@
             [cardView removeFromSuperview];
         }
     }
+    [self layoutCardViewsWithCardCount:cardCount newCardsCount:cardCount];
     
-    NSLog(@"center x:%f y:%f",self.view.center.x,self.view.center.y);
-    
+    return [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count] usingDeck:[self createDeck]];
+}
+
+- (void)layoutCardViewsWithCardCount:(NSInteger)cardCount newCardsCount:(NSInteger)newCardsCount
+{
     int x = 0;
+    
     for (int i=0; i<self.grid.rowCount; i++){
         for (int j=0; j<self.grid.columnCount; j++){
             x +=1;
@@ -123,7 +128,7 @@
             CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
             CardView *cardView = [self cardViewForCardAtIndex:x Frame:frame];
             cardView.delegate = self;
-            [UIView animateWithDuration:0.5f delay:x*0.2f options:0 animations:^{
+            [UIView animateWithDuration:1.0f delay:x*0.2f options:0 animations:^{
                 cardView.frame = frame;
             } completion:^(BOOL finished) {
                 [self.gameCardsView sendSubviewToBack:cardView];
@@ -141,7 +146,6 @@
             break;
         }
     }
-    return [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count] usingDeck:[self createDeck]];
 }
 
 - (IBAction)startNewGame
@@ -162,7 +166,7 @@
             [self game];
             
             //start new game
-            //[self updateUI];
+            [self updateUINewGame];
             [self setGameAlreadySaved:NO];
             [self setGameEnded:NO];
             
@@ -214,6 +218,7 @@
     if (self.isGameAlreadySaved){
         return;
     }
+    
     [self setGameAlreadySaved:YES];
     self.gameTime = [self.game endGame];
     
@@ -229,9 +234,7 @@
     }else{
         [data addObject:gameData];
     }
-    
     [defaults setObject:data forKey:SAVE_KEY];
-    
 }
 
 #pragma mark - Game UI
@@ -253,44 +256,29 @@
     }
     
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    
    
     [self updateView:(CardView *)sender forCard:self.activeCard defaultEnable:YES];
     
     switch (self.game.matchStatus) {
         case MatchStatusTypeMatchFound:
         case MatchStatusTypeMatchNotFound:
-            [self updateUI];
+            [self updateUIMatchDone];
             break;
-            
         default:
             break;
     }
 }
 
-- (void)updateUI
+- (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable
 {
-    self.waitingForAnimationFinish = YES;
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
-    
-    [self performSelector:@selector(updateCardsView) withObject:self afterDelay:1.0f];
+    [cardView setCard:card defaultEnable:defaultEnable];
 }
 
-- (void)updateCardsView
+- (void)updateUIMatchDone
 {
-    self.waitingForAnimationFinish = NO;
-    
-    for (CardView *cardView in self.cardViews){
-        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
-        Card *card = [self.game cardAtIndex:cardViewIndex];
-        
-        if (card == self.activeCard && !card.isMatched){
-            self.activeCard.chosen = NO;
-        }
-        [self updateView:cardView forCard:card defaultEnable:NO];
-    }
-    self.activeCard = nil;
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
 }
+
 
 - (void)updateUINewGame
 {
@@ -300,6 +288,7 @@
         [self updateView:cardView forCard:card defaultEnable:NO];
     }
 }
+
 
 #pragma mark - methods to be overwritten
 
@@ -317,12 +306,6 @@
 {
     return nil;
 }
-
-- (void)updateView:(CardView *)cardView forCard:(Card *)card
-{
-    return;
-}
-
 
 
 @end

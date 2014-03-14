@@ -225,18 +225,8 @@
 		547838AB188633F100780AF6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5439FF5E18861DB8006CC0A7 /* Card.h */,
-				5439FF5F18861DB8006CC0A7 /* Card.m */,
-				5439FF64188621A5006CC0A7 /* PlayingCard.h */,
-				5439FF65188621A5006CC0A7 /* PlayingCard.m */,
-				54B6D03B1889015200578DAC /* SetCard.h */,
-				54B6D03C1889015200578DAC /* SetCard.m */,
-				5439FF6118861F1A006CC0A7 /* Deck.h */,
-				5439FF6218861F1A006CC0A7 /* Deck.m */,
-				5439FF67188628D6006CC0A7 /* PlayingCardDeck.h */,
-				5439FF68188628D6006CC0A7 /* PlayingCardDeck.m */,
-				54B6D03E1889017900578DAC /* SetCardDeck.h */,
-				54B6D03F1889017900578DAC /* SetCardDeck.m */,
+				5503152518D2A61E0046EE0B /* Card */,
+				5503152618D2A6260046EE0B /* Deck */,
 				547838AC1886385500780AF6 /* CardMatchingGame.h */,
 				547838AD1886385500780AF6 /* CardMatchingGame.m */,
 			);
@@ -258,6 +248,32 @@
 				600F935718A7E43F00E43860 /* HighScoresViewController.m */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		5503152518D2A61E0046EE0B /* Card */ = {
+			isa = PBXGroup;
+			children = (
+				5439FF5E18861DB8006CC0A7 /* Card.h */,
+				5439FF5F18861DB8006CC0A7 /* Card.m */,
+				5439FF64188621A5006CC0A7 /* PlayingCard.h */,
+				5439FF65188621A5006CC0A7 /* PlayingCard.m */,
+				54B6D03B1889015200578DAC /* SetCard.h */,
+				54B6D03C1889015200578DAC /* SetCard.m */,
+			);
+			name = Card;
+			sourceTree = "<group>";
+		};
+		5503152618D2A6260046EE0B /* Deck */ = {
+			isa = PBXGroup;
+			children = (
+				5439FF6118861F1A006CC0A7 /* Deck.h */,
+				5439FF6218861F1A006CC0A7 /* Deck.m */,
+				5439FF67188628D6006CC0A7 /* PlayingCardDeck.h */,
+				5439FF68188628D6006CC0A7 /* PlayingCardDeck.m */,
+				54B6D03E1889017900578DAC /* SetCardDeck.h */,
+				54B6D03F1889017900578DAC /* SetCardDeck.m */,
+			);
+			name = Deck;
 			sourceTree = "<group>";
 		};
 		550DA70E18B4A25A0086ACD2 /* Grid */ = {

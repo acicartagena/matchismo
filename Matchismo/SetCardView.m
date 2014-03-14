@@ -37,6 +37,18 @@
     self.contentMode = UIViewContentModeRedraw;
 }
 
+- (void)setCard:(Card *)card defaultEnable:(BOOL)defaultEnable
+{
+    
+    SetCard* setCard = (SetCard *)card;
+    
+    [self setRank:setCard.rank];
+    [self setShade:setCard.shading];
+    [self setShape:setCard.symbol];
+    [self setColor:setCard.color];
+    [self setEnable:!card.isChosen];
+}
+
 - (void)setShade:(SetCardShadingType)shade
 {
     _shade = shade;

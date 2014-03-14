@@ -99,13 +99,7 @@
     NSArray* filteredArray = [otherCards filteredArrayUsingPredicate:predicate];
     //if all the elements of the array has a property similar to the card
     if (isSame && (filteredArray.count == otherCards.count)){
-        score = 2;
-
-//        if (otherCards.count == 2){
-//            //check if the 2 cards in the array are also have matching property
-//            score += [otherCards[0] checkProperty:property OfCards:@[otherCards[1]] forSameValue:isSame];
-//        }
-        
+        score = 2;        
     }
     //if all the elements of the array has a property different from that of the card
     else if (!isSame && (filteredArray.count == 0)){
