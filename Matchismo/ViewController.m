@@ -29,22 +29,12 @@
 
 #pragma mark - lifecyle
 
-- (void) viewDidLoad
+- (void)viewDidLoad
 {
     [super viewDidLoad];
     
     self.grid.size = self.gameCardsView.frame.size;
     self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
-}
-
--(void) viewDidAppear:(BOOL)animated
-{
-
-    [super viewDidAppear:animated];
-}
-
--(void) viewDidDisappear:(BOOL)animated{
-    
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -117,32 +107,48 @@
 
 - (void)layoutCardViewsWithCardCount:(NSInteger)cardCount newCardsCount:(NSInteger)newCardsCount
 {
-    int x = 0;
+    int cardCounter = 0;
+    int newCardsCounter = 0;
     
     for (int i=0; i<self.grid.rowCount; i++){
         for (int j=0; j<self.grid.columnCount; j++){
-            x +=1;
-            if (x> cardCount){
+            cardCounter +=1;
+            if (cardCounter> cardCount){
                 break;
             }
+            
             CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-            CardView *cardView = [self cardViewForCardAtIndex:x Frame:frame];
-            cardView.delegate = self;
-            [UIView animateWithDuration:1.0f delay:x*0.2f options:0 animations:^{
+            CardView *cardView = nil;
+            if (cardCount == newCardsCount) {
+                cardView = [self cardViewForCardAtIndex:cardCounter Frame:frame];
+                cardView.delegate = self;
+                [self.cardViews addObject:cardView];
+                if (cardCounter==1){
+                    [self.gameCardsView addSubview:cardView];
+                }else{
+                    [self.gameCardsView insertSubview:cardView belowSubview:self.cardViews[cardCounter-2]];
+                }
+            }else{
+                
+                if (cardCounter > cardCount-newCardsCount && newCardsCounter < newCardsCount){
+                    newCardsCounter += 1;
+                    cardView = [self cardViewForCardAtIndex:cardCounter Frame:frame];
+                    cardView.delegate = self;
+                    [self.cardViews addObject:cardView];
+                    [self.gameCardsView addSubview:cardView];
+                }else{
+                    cardView = self.cardViews[cardCounter-1];
+                }
+            }
+            
+            [UIView animateWithDuration:1.0f delay:cardCounter*0.2f options:0 animations:^{
                 cardView.frame = frame;
             } completion:^(BOOL finished) {
                 [self.gameCardsView sendSubviewToBack:cardView];
             }];
             
-            [self.cardViews addObject:cardView];
-            if (x==1){
-                [self.gameCardsView addSubview:cardView];
-            }else{
-                [self.gameCardsView insertSubview:cardView belowSubview:self.cardViews[x-2]];
-            }
-            
         }
-        if (x> cardCount){
+        if (cardCounter> cardCount){
             break;
         }
     }
@@ -278,7 +284,6 @@
 {
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
 }
-
 
 - (void)updateUINewGame
 {

@@ -58,6 +58,7 @@
     
     self.waitingForAnimationFinish = YES;
     
+    __weak typeof (self) weakSelf = self;
     for (CardView *cardView in self.cardViews){
         NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
         SetCard *card = (SetCard *)[self.game cardAtIndex:cardViewIndex];
@@ -67,10 +68,12 @@
             } completion:^(BOOL finished) {
                 cardView.hidden = YES;
                 self.waitingForAnimationFinish = NO;
+                [self.cardViews removeObject:cardView];
             }];
         }
     }
     [self performSelector:@selector(updateCardsView) withObject:self afterDelay:0.5f];
+
 }
 
 - (void)updateCardsView
@@ -86,5 +89,9 @@
     }
 }
 
+- (IBAction)dealThreeMoreCards:(id)sender
+{
+    [self layoutCardViewsWithCardCount:15 newCardsCount:3];
+}
 
 @end

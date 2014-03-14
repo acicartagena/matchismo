@@ -55,7 +55,7 @@
 - (void)updateUIMatchDone;
 - (void)updateCardsView;
 - (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
-
+- (void)layoutCardViewsWithCardCount:(NSInteger)cardCount newCardsCount:(NSInteger)newCardsCount;
 
 
 @end
