@@ -105,10 +105,48 @@
     return [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count] usingDeck:[self createDeck]];
 }
 
+- (void)layoutCardViewsWithCardCount:(NSInteger)cardCount createCards:(BOOL)createCards
+{
+    int x = 0;
+    
+    for (int i=0; i<self.grid.rowCount; i++){
+        for (int j=0; j<self.grid.columnCount; j++){
+            x +=1;
+            if (x> cardCount){
+                break;
+            }
+            CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
+            CardView *cardView;
+            if (createCards){
+                cardView = [self cardViewForCardAtIndex:x Frame:frame];
+                cardView.delegate = self;
+                [self.cardViews addObject:cardView];
+                if (x==1){
+                    [self.gameCardsView addSubview:cardView];
+                }else{
+                    [self.gameCardsView insertSubview:cardView belowSubview:self.cardViews[x-2]];
+                }
+            }
+            
+            [UIView animateWithDuration:1.0f delay:x*0.2f options:0 animations:^{
+                cardView.frame = frame;
+            } completion:^(BOOL finished) {
+                [self.gameCardsView sendSubviewToBack:cardView];
+            }];
+            
+        }
+        if (x> cardCount){
+            break;
+        }
+    }
+}
+
 - (void)layoutCardViewsWithCardCount:(NSInteger)cardCount newCardsCount:(NSInteger)newCardsCount
 {
     int cardCounter = 0;
     int newCardsCounter = 0;
+    
+    NSInteger currentCards = [self.cardViews count];
     
     for (int i=0; i<self.grid.rowCount; i++){
         for (int j=0; j<self.grid.columnCount; j++){

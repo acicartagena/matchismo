@@ -68,7 +68,7 @@
             } completion:^(BOOL finished) {
                 cardView.hidden = YES;
                 self.waitingForAnimationFinish = NO;
-                [self.cardViews removeObject:cardView];
+                //[self.cardViews removeObject:cardView];
             }];
         }
     }
