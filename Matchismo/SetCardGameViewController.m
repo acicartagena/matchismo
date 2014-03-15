@@ -67,12 +67,12 @@
             [UIView animateWithDuration:1.5f delay:0.5f options:0 animations:^{
                 cardView.frame = CGRectMake(160.0f - cardView.frame.size.width*0.5f, 600.0f - cardView.frame.size.height*0.5f, cardView.frame.size.width, cardView.frame.size.height);
             } completion:^(BOOL finished) {
-                if (cardsMatchCount == 3){
-                    [self drawNewCards:3];
-                }
                 cardView.hidden = YES;
                 cardView.inPlay = NO;
-                self.waitingForAnimationFinish = NO;
+                if (cardsMatchCount == 3){
+                    self.waitingForAnimationFinish = NO;
+                    [self drawNewCards:3];
+                }
             }];
         }
     }

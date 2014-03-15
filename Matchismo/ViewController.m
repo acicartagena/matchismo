@@ -19,9 +19,9 @@
 
 @property (nonatomic, getter = isGameEnded) BOOL gameEnded;
 @property (nonatomic, getter = isGameAlreadySaved) BOOL gameAlreadySaved;
-@property (nonatomic, strong) NSString *gameName;
+@property (strong, nonatomic) NSString *gameName;
 @property (nonatomic) NSTimeInterval gameTime;
-
+@property (nonatomic) BOOL setupNewGame;
 
 @end
 
@@ -67,7 +67,9 @@
 - (CardMatchingGame *)game
 {
     if (!_game){
+        self.setupNewGame = YES;
         _game = [self createGame];
+        self.setupNewGame = NO;
     }
     return _game;
 }
@@ -141,7 +143,12 @@
             CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
             CardView *cardView = cardsInPlay[x-1];
             
-            [UIView animateWithDuration:1.0f delay:x*0.2f options:0 animations:^{
+            CGFloat delay = 0;
+            if (self.setupNewGame){
+                delay = x*0.2f;
+            }
+            
+            [UIView animateWithDuration:1.0f delay:delay options:0 animations:^{
                 cardView.frame = frame;
 //                NSLog(@"cardview frame: x:%f y:%f width:%f height:%f",frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
             } completion:^(BOOL finished) {

@@ -62,7 +62,7 @@ static const int COST_TO_CHOOSE = 1;
 
 - (Card *)drawNewCard
 {
-    Card *card = [self.deck drawRandomCard];
+    Card *card = [_deck drawRandomCard];
     if (card){
         [self.cards addObject:card];
     }
