@@ -50,12 +50,13 @@
 - (Deck *)createDeck;
 - (CardMatchingGame *)createGame;
 - (CardMatchingGame *)createGameWithCardCount:(NSInteger)cardCount;
-- (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame;
+- (void)drawNewCards:(NSInteger)numberOfCards;
+- (void)layoutCardViews;
 - (void)updateUINewGame;
 - (void)updateUIMatchDone;
 - (void)updateCardsView;
 - (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
-- (void)layoutCardViewsWithCardCount:(NSInteger)cardCount newCardsCount:(NSInteger)newCardsCount;
+- (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame;
 
 
 @end

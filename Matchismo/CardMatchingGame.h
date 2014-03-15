@@ -37,7 +37,7 @@ typedef enum MatchStatusTypes{
 - (Card *)cardAtIndex:(NSUInteger)index;
 //- (void)removeCard:(Card *)card;
 - (NSTimeInterval)endGame;
-- (BOOL) drawNewCardsWithCount:(NSInteger)newCards;
+- (Card *)drawNewCard;
 - (NSInteger)cardCount;
 
 

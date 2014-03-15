@@ -23,7 +23,6 @@
     [super viewDidLoad];
     
     self.cardCount =SET_CARD_GAME_INIT_COUNT;
-    self.grid.minimumNumberOfCells = self.cardCount;
     [self game];
     [self updateUINewGame];
 }
@@ -46,9 +45,10 @@
 
 - (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame
 {
-    //SetCardView *cardView =[[SetCardView alloc] initWithFrame:CGRectMake(self.view.center.x - frame.size.width + index*1.0f, self.view.center.y - frame.size.height*2 + index*1.f, frame.size.width, frame.size.height)];
-    
     SetCardView *cardView =[[SetCardView alloc] initWithFrame:CGRectMake(160.0f - frame.size.width*0.5f, 600.0f - frame.size.height*0.5f, frame.size.width, frame.size.height)];
+    cardView.delegate = self;
+    [self.cardViews addObject:cardView];
+    
     return cardView;
 }
 
@@ -57,18 +57,22 @@
     [super updateUIMatchDone];
     
     self.waitingForAnimationFinish = YES;
+    int cardsMatchCount = 0;
     
-    __weak typeof (self) weakSelf = self;
     for (CardView *cardView in self.cardViews){
         NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
         SetCard *card = (SetCard *)[self.game cardAtIndex:cardViewIndex];
         if (card.isMatched && !cardView.isHidden){
+            cardsMatchCount += 1;
             [UIView animateWithDuration:1.5f delay:0.5f options:0 animations:^{
                 cardView.frame = CGRectMake(160.0f - cardView.frame.size.width*0.5f, 600.0f - cardView.frame.size.height*0.5f, cardView.frame.size.width, cardView.frame.size.height);
             } completion:^(BOOL finished) {
+                if (cardsMatchCount == 3){
+                    [self drawNewCards:3];
+                }
                 cardView.hidden = YES;
+                cardView.inPlay = NO;
                 self.waitingForAnimationFinish = NO;
-                //[self.cardViews removeObject:cardView];
             }];
         }
     }
@@ -91,7 +95,10 @@
 
 - (IBAction)dealThreeMoreCards:(id)sender
 {
-    [self layoutCardViewsWithCardCount:15 newCardsCount:3];
+    if (self.cardViews.count == 81){
+        return;
+    }
+    [self drawNewCards:3];
 }
 
 @end

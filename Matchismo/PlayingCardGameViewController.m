@@ -25,7 +25,6 @@
 {
     [super viewDidLoad];
     self.cardCount = PLAYING_CARD_COUNT;
-    self.grid.minimumNumberOfCells = self.cardCount;
     [self game];
 }
 
@@ -50,6 +49,8 @@
 {
 //    PlayingCardView *cardView =[[PlayingCardView alloc] initWithFrame:CGRectMake(self.view.center.x - frame.size.width + index*1.0f, self.view.center.y - frame.size.height*2 + index*1.f, frame.size.width, frame.size.height)];
     PlayingCardView *cardView =[[PlayingCardView alloc] initWithFrame:CGRectMake(160.0f - frame.size.width*0.5f, 600.0f - frame.size.height*0.5f, frame.size.width, frame.size.height)];
+    cardView.delegate = self;
+    [self.cardViews addObject:cardView];
     
     return cardView;
 }

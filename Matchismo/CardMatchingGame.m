@@ -60,18 +60,15 @@ static const int COST_TO_CHOOSE = 1;
     return (index<[self.cards count]) ? [self.cards objectAtIndex:index]:nil;
 }
 
-- (BOOL)drawNewCardsWithCount:(NSInteger)newCards
+- (Card *)drawNewCard
 {
-    for (int i=0 ;i<newCards; i++){
-        Card *card = [self.deck drawRandomCard];
-        if (card){
-            [self.cards addObject:card];
-        }else{
-            return NO;
-        }
+    Card *card = [self.deck drawRandomCard];
+    if (card){
+        [self.cards addObject:card];
     }
-    return YES;
+    return card;
 }
+
 
 - (NSInteger)cardCount
 {

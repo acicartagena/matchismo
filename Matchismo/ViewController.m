@@ -100,14 +100,37 @@
             [cardView removeFromSuperview];
         }
     }
-    [self layoutCardViewsWithCardCount:cardCount newCardsCount:cardCount];
+    _game = [[CardMatchingGame alloc] initWithCardCount:cardCount usingDeck:[self createDeck]];
+    [self drawNewCards:cardCount];
+    [self layoutCardViews];
     
-    return [[CardMatchingGame alloc] initWithCardCount:[self.cardViews count] usingDeck:[self createDeck]];
+    return _game;
 }
 
-- (void)layoutCardViewsWithCardCount:(NSInteger)cardCount createCards:(BOOL)createCards
+- (void)drawNewCards:(NSInteger)numberOfCards
+{
+    CGRect tempFrame = [self.grid frameOfCellAtRow:0 inColumn:0];
+    NSInteger index = [self.cardViews count];
+    for (int i =0; i<numberOfCards; i++) {
+        //create card views
+        CardView *cardView = [self cardViewForCardAtIndex:index++ Frame:tempFrame];
+        
+        //draw card
+        Card *card = [_game drawNewCard];
+        
+        [self updateView:cardView forCard:card defaultEnable:YES];
+        [self.gameCardsView addSubview:cardView];
+    }
+    [self layoutCardViews];
+}
+
+- (void)layoutCardViews
 {
     int x = 0;
+    NSPredicate *inPlayCardsPredicate = [NSPredicate predicateWithFormat:@"self.inPlay == YES"];
+    NSArray *cardsInPlay = [self.cardViews filteredArrayUsingPredicate:inPlayCardsPredicate];
+    NSInteger cardCount = cardsInPlay.count;
+    self.grid.minimumNumberOfCells = cardCount;
     
     for (int i=0; i<self.grid.rowCount; i++){
         for (int j=0; j<self.grid.columnCount; j++){
@@ -116,77 +139,18 @@
                 break;
             }
             CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-            CardView *cardView;
-            if (createCards){
-                cardView = [self cardViewForCardAtIndex:x Frame:frame];
-                cardView.delegate = self;
-                [self.cardViews addObject:cardView];
-                if (x==1){
-                    [self.gameCardsView addSubview:cardView];
-                }else{
-                    [self.gameCardsView insertSubview:cardView belowSubview:self.cardViews[x-2]];
-                }
-            }
+            CardView *cardView = cardsInPlay[x-1];
             
             [UIView animateWithDuration:1.0f delay:x*0.2f options:0 animations:^{
                 cardView.frame = frame;
+//                NSLog(@"cardview frame: x:%f y:%f width:%f height:%f",frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
             } completion:^(BOOL finished) {
                 [self.gameCardsView sendSubviewToBack:cardView];
+                [cardView setNeedsDisplay];
             }];
             
         }
         if (x> cardCount){
-            break;
-        }
-    }
-}
-
-- (void)layoutCardViewsWithCardCount:(NSInteger)cardCount newCardsCount:(NSInteger)newCardsCount
-{
-    int cardCounter = 0;
-    int newCardsCounter = 0;
-    
-    NSInteger currentCards = [self.cardViews count];
-    
-    for (int i=0; i<self.grid.rowCount; i++){
-        for (int j=0; j<self.grid.columnCount; j++){
-            cardCounter +=1;
-            if (cardCounter> cardCount){
-                break;
-            }
-            
-            CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-            CardView *cardView = nil;
-            if (cardCount == newCardsCount) {
-                cardView = [self cardViewForCardAtIndex:cardCounter Frame:frame];
-                cardView.delegate = self;
-                [self.cardViews addObject:cardView];
-                if (cardCounter==1){
-                    [self.gameCardsView addSubview:cardView];
-                }else{
-                    [self.gameCardsView insertSubview:cardView belowSubview:self.cardViews[cardCounter-2]];
-                }
-            }else{
-                
-                if (cardCounter > cardCount-newCardsCount && newCardsCounter < newCardsCount){
-                    newCardsCounter += 1;
-                    cardView = [self cardViewForCardAtIndex:cardCounter Frame:frame];
-                    cardView.delegate = self;
-                    [self.cardViews addObject:cardView];
-                    [self.gameCardsView addSubview:cardView];
-                }else{
-                    cardView = self.cardViews[cardCounter-1];
-                }
-            }
-            
-            [UIView animateWithDuration:1.0f delay:cardCounter*0.2f options:0 animations:^{
-                cardView.frame = frame;
-            } completion:^(BOOL finished) {
-                [self.gameCardsView sendSubviewToBack:cardView];
-            }];
-            
-        }
-        if (cardCounter> cardCount){
             break;
         }
     }
@@ -348,6 +312,11 @@
 - (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame
 {
     return nil;
+}
+
+- (void)updateCardsView
+{
+    return;
 }
 
 

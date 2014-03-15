@@ -19,8 +19,6 @@
 
 #pragma mark - Initialization
 
-
-
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -28,6 +26,11 @@
         // Initialization code
         self.frame = CGRectMake(frame.origin.x, frame.origin.y, DEFAULT_CARD_WIDTH, DEFAULT_CARD_HEIGHT);
         self.backgroundColor = [UIColor whiteColor];
+        self.inPlay = YES;
+        
+        self.backgroundColor = nil;
+        self.opaque = NO;
+        self.contentMode = UIViewContentModeRedraw;
         
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCard:)];
         tap.numberOfTapsRequired = 1;
@@ -72,6 +75,11 @@
 - (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT; }
 - (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
 - (CGFloat)cornerOffset { return [self cornerRadius] / 3.0; }
+
+- (void)setCard:(Card *)card defaultEnable:(BOOL)defaultEnable
+{
+    return;
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

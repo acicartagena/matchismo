@@ -37,6 +37,7 @@
     [self setSuit:playingCard.suit];
     [self setFaceUp:card.isChosen?YES:NO];
     [self setEnable:defaultEnable ? YES:!card.isMatched];
+    [self setInPlay:YES];
 }
 
 - (void)setFaceCardScaleFactor:(CGFloat)faceCardScaleFactor

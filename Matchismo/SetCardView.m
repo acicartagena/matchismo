@@ -15,28 +15,6 @@
     return 12;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-        [self setup];
-    }
-    return self;
-}
-
-- (void)awakeFromNib
-{
-    [self setup];
-}
-
-- (void)setup
-{
-    self.backgroundColor = nil;
-    self.opaque = NO;
-    self.contentMode = UIViewContentModeRedraw;
-}
-
 - (void)setCard:(Card *)card defaultEnable:(BOOL)defaultEnable
 {
     

@@ -22,9 +22,9 @@ static const CGFloat DEFAULT_CARD_HEIGHT = 60.0f;
 
 @property (nonatomic,weak) id<CardViewDelegate> delegate;
 @property (nonatomic) BOOL enable;
+@property (nonatomic) BOOL inPlay;
 
 + (CGFloat)cardViewDefaultAspectRatio;
-+ (NSInteger)initialNumberOfCards;
 
 - (void)drawCard;
 
