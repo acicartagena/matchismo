@@ -26,18 +26,10 @@ static const int TWOCARD_MATCH_BONUS = 4;
 static const int THREECARD_MATCH_BONUS = 2;
 static const int COST_TO_CHOOSE = 1;
 
-- (instancetype)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck{
+- (instancetype)initWithDeck:(Deck *)deck
+{
     self = [super init];
     if (self){
-        for (int i = 0; i<count; i++){
-            Card *card = [deck drawRandomCard];
-            if (card){
-                [self.cards addObject:card];
-            }else{
-                self = nil;
-                break;
-            }
-        }
         self.deck = deck;
         self.numberOfCardsMatchMode = [deck numberOfCardsMatchMode];
         self.matchStatus = MatchStatusTypeNoCardSelected;
@@ -46,44 +38,34 @@ static const int COST_TO_CHOOSE = 1;
     return self;
 }
 
-- (NSMutableArray *)cards{
+- (NSMutableArray *)cards
+{
     if (!_cards) _cards = [[NSMutableArray alloc] init];
     return _cards;
 }
 
-- (NSMutableArray *)chosenCards{
+- (NSMutableArray *)chosenCards
+{
     if (!_chosenCards) _chosenCards = [[NSMutableArray alloc] init];
     return _chosenCards;
 }
 
-- (Card *)cardAtIndex:(NSUInteger)index{
+- (Card *)cardAtIndex:(NSUInteger)index
+{
     return (index<[self.cards count]) ? [self.cards objectAtIndex:index]:nil;
 }
 
 - (Card *)drawNewCard
 {
-    Card *card = [_deck drawRandomCard];
+    Card *card = [self.deck drawRandomCard];
     if (card){
         [self.cards addObject:card];
     }
     return card;
 }
 
-
-- (NSInteger)cardCount
+- (void)chooseCardAtIndex:(NSUInteger)index
 {
-    return [self.cards count];
-}
-
-//- (void)removeCard:(Card *)card
-//{
-//    if ([self.cards containsObject:card]){
-//        [self.cards removeObject:card];
-//    }
-//}
-
-
-- (void)chooseCardAtIndex:(NSUInteger)index{
     Card *card = [self cardAtIndex:index];
     
     //if card is matched, do nothing
@@ -102,7 +84,7 @@ static const int COST_TO_CHOOSE = 1;
     }
 
     self.matchStatus = MatchStatusTypeNotEnoughMoves;
-    [[NSNotificationCenter defaultCenter] postNotificationName:MatchStatusTypeChangedNotification object:nil];
+    //[[NSNotificationCenter defaultCenter] postNotificationName:MatchStatusTypeChangedNotification object:nil];
     
     //there are still not enough cards to determine a match
     if ([[self chosenCards] count] < self.numberOfCardsMatchMode-1){
@@ -143,7 +125,8 @@ static const int COST_TO_CHOOSE = 1;
     }
 }
 
-- (NSTimeInterval)endGame{
+- (NSTimeInterval)endGame
+{
     self.endDate = [NSDate date];
     NSTimeInterval temp = [self.endDate timeIntervalSinceDate:self.startDate];
     return temp;

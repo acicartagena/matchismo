@@ -48,8 +48,7 @@
 
 
 - (Deck *)createDeck;
-- (CardMatchingGame *)createGame;
-- (CardMatchingGame *)createGameWithCardCount:(NSInteger)cardCount;
+- (void)createGameWithCardCount:(NSInteger)cardCount;
 - (void)drawNewCards:(NSInteger)numberOfCards;
 - (void)layoutCardViews;
 - (void)updateUINewGame;

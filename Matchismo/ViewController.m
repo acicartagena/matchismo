@@ -67,9 +67,7 @@
 - (CardMatchingGame *)game
 {
     if (!_game){
-        self.setupNewGame = YES;
-        _game = [self createGame];
-        self.setupNewGame = NO;
+        _game = [[CardMatchingGame alloc] initWithDeck:[self createDeck]];
     }
     return _game;
 }
@@ -92,7 +90,7 @@
 
 #pragma mark - Game Control
 
-- (CardMatchingGame *)createGameWithCardCount:(NSInteger)cardCount
+- (void)createGameWithCardCount:(NSInteger)cardCount
 {
     if ([self.cardViews count]>0){
         [self.cardViews removeAllObjects];
@@ -102,11 +100,11 @@
             [cardView removeFromSuperview];
         }
     }
-    _game = [[CardMatchingGame alloc] initWithCardCount:cardCount usingDeck:[self createDeck]];
+    //_game = [[CardMatchingGame alloc] initWithCardCount:cardCount usingDeck:[self createDeck]];
+    self.setupNewGame = YES;
     [self drawNewCards:cardCount];
-    [self layoutCardViews];
-    
-    return _game;
+    self.setupNewGame = NO;
+    //return _game;
 }
 
 - (void)drawNewCards:(NSInteger)numberOfCards
@@ -118,11 +116,13 @@
         CardView *cardView = [self cardViewForCardAtIndex:index++ Frame:tempFrame];
         
         //draw card
-        Card *card = [_game drawNewCard];
-        
+        Card *card = [self.game drawNewCard];
+       
         [self updateView:cardView forCard:card defaultEnable:YES];
+        
         [self.gameCardsView addSubview:cardView];
     }
+    
     [self layoutCardViews];
 }
 
@@ -150,7 +150,6 @@
             
             [UIView animateWithDuration:1.0f delay:delay options:0 animations:^{
                 cardView.frame = frame;
-//                NSLog(@"cardview frame: x:%f y:%f width:%f height:%f",frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
             } completion:^(BOOL finished) {
                 [self.gameCardsView sendSubviewToBack:cardView];
                 [cardView setNeedsDisplay];
@@ -179,6 +178,7 @@
             //reset game
             self.game = nil;
             [self game];
+            [self createGameWithCardCount:self.cardCount];
             
             //start new game
             [self updateUINewGame];
@@ -271,7 +271,6 @@
     }
     
     [self.game chooseCardAtIndex:chosenButtonIndex];
-   
     [self updateView:(CardView *)sender forCard:self.activeCard defaultEnable:YES];
     
     switch (self.game.matchStatus) {

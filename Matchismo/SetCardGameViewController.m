@@ -24,7 +24,7 @@
     
     self.cardCount =SET_CARD_GAME_INIT_COUNT;
     [self game];
-    [self updateUINewGame];
+    [self createGameWithCardCount:self.cardCount];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -36,11 +36,6 @@
 #pragma mark - 
 - (Deck *)createDeck{
     return [[SetCardDeck alloc] init];
-}
-
-- (CardMatchingGame *)createGame
-{
-    return [self createGameWithCardCount:self.cardCount];;
 }
 
 - (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame
@@ -62,13 +57,13 @@
     for (CardView *cardView in self.cardViews){
         NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
         SetCard *card = (SetCard *)[self.game cardAtIndex:cardViewIndex];
-        if (card.isMatched && !cardView.isHidden){
+        if (card.isMatched && cardView.inPlay){
             cardsMatchCount += 1;
+            cardView.inPlay = NO;
             [UIView animateWithDuration:1.5f delay:0.5f options:0 animations:^{
                 cardView.frame = CGRectMake(160.0f - cardView.frame.size.width*0.5f, 600.0f - cardView.frame.size.height*0.5f, cardView.frame.size.width, cardView.frame.size.height);
             } completion:^(BOOL finished) {
                 cardView.hidden = YES;
-                cardView.inPlay = NO;
                 if (cardsMatchCount == 3){
                     self.waitingForAnimationFinish = NO;
                     [self drawNewCards:3];

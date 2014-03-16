@@ -26,6 +26,7 @@
     [super viewDidLoad];
     self.cardCount = PLAYING_CARD_COUNT;
     [self game];
+    [self createGameWithCardCount:self.cardCount];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -40,10 +41,6 @@
     return [[PlayingCardDeck alloc] init];
 }
 
-- (CardMatchingGame *)createGame
-{
-    return [self createGameWithCardCount:self.cardCount];
-}
 
 - (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame
 {

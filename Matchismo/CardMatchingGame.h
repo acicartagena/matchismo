@@ -31,17 +31,11 @@ typedef enum MatchStatusTypes{
 @property (nonatomic) MatchStatus matchStatus;
 
 //designated initializer
-- (instancetype)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck;
+- (instancetype)initWithDeck:(Deck *)deck;
 
 - (void) chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
-//- (void)removeCard:(Card *)card;
 - (NSTimeInterval)endGame;
 - (Card *)drawNewCard;
-- (NSInteger)cardCount;
-
-
-
-
 
 @end
