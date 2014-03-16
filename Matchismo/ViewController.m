@@ -21,6 +21,7 @@
 @property (nonatomic, getter = isGameAlreadySaved) BOOL gameAlreadySaved;
 @property (strong, nonatomic) NSString *gameName;
 @property (nonatomic) NSTimeInterval gameTime;
+@property (nonatomic) BOOL cardsInPile;
 
 
 @end
@@ -33,6 +34,7 @@
 {
     [super viewDidLoad];
     self.setupNewGame = YES;
+    [self setupGestureRecognizers];
 }
 
 - (void)viewDidLayoutSubviews
@@ -98,7 +100,45 @@
     return _grid;
 }
 
+#pragma mark - View Gesture Recognizers
+
+- (void)setupGestureRecognizers
+{
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    tap.cancelsTouchesInView = NO;
+    
+    pinch.delegate = self;
+    pan.delegate = self;
+    tap.delegate = self;
+    
+    [self.gameCardsView addGestureRecognizer:pinch];
+    [self.gameCardsView addGestureRecognizer:tap];
+    [self.gameCardsView addGestureRecognizer:pan];
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gesture
+{
+//    gesture.view.transform = CGAffineTransformScale(gesture.view.transform, gesture.scale, gesture.scale);
+//    gesture.scale = 1;
+}
+
+- (void)pan:(UIGestureRecognizer *)gesture
+{
+    
+}
+
+- (void)tap:(UIGestureRecognizer *)tap
+{
+    
+}
+
 #pragma mark - Setup Game
+
+
 
 - (void)createGameWithCardCount:(NSInteger)cardCount
 {
@@ -170,7 +210,7 @@
     }
 }
 
-#pragma mark - Game States
+#pragma mark - Game Controls
 
 - (IBAction)startNewGame
 {
@@ -271,7 +311,7 @@
     [defaults setObject:data forKey:SAVE_KEY];
 }
 
-#pragma mark - Game Control
+#pragma mark - Game Play
 - (void)cardSelected:(id)sender
 {
     if (self.isGameEnded){

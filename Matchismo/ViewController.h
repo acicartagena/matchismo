@@ -33,7 +33,7 @@
 
 #define SAVE_KEY @"scoreData"
 
-@interface ViewController : UIViewController <CardViewDelegate>
+@interface ViewController : UIViewController <CardViewDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *gameCardsView;//card views container
 
