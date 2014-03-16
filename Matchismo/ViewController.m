@@ -32,10 +32,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
     self.grid.size = self.gameCardsView.frame.size;
     self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
 }
+
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
@@ -43,6 +48,9 @@
     self.grid.size = self.gameCardsView.frame.size;
     self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
     self.grid.minimumNumberOfCells = self.cardCount;
+    
+    NSPredicate *inPlayCardsPredicate = [NSPredicate predicateWithFormat:@"self.inPlay == YES"];
+    NSArray *cardsInPlay = [self.cardViews filteredArrayUsingPredicate:inPlayCardsPredicate];
     
     int x = 0;
     for (int i=0; i<self.grid.rowCount; i++){
@@ -52,8 +60,7 @@
                 break;
             }
             CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-            NSLog(@"frame: x:%f y:%f width:%f height:%f",frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
-            [self.cardViews[x-1] setFrame:frame];
+            [cardsInPlay[x-1] setFrame:frame];
             
         }
         if (x> self.cardCount){
@@ -100,11 +107,9 @@
             [cardView removeFromSuperview];
         }
     }
-    //_game = [[CardMatchingGame alloc] initWithCardCount:cardCount usingDeck:[self createDeck]];
     self.setupNewGame = YES;
     [self drawNewCards:cardCount];
     self.setupNewGame = NO;
-    //return _game;
 }
 
 - (void)drawNewCards:(NSInteger)numberOfCards
@@ -252,7 +257,7 @@
     [defaults setObject:data forKey:SAVE_KEY];
 }
 
-#pragma mark - Game UI
+#pragma mark - Game View
 - (void)cardSelected:(id)sender
 {
     if (self.isGameEnded){
@@ -302,15 +307,9 @@
     }
 }
 
-
 #pragma mark - methods to be overwritten
 
 - (Deck *)createDeck
-{
-    return nil;
-}
-
-- (CardMatchingGame *)createGame
 {
     return nil;
 }

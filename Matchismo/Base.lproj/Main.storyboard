@@ -13,10 +13,10 @@
                         <viewControllerLayoutGuide type="bottom" id="gWm-Kq-EKX"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="431"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score:0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNx-3w-5mw">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score:000000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yNx-3w-5mw">
                                 <rect key="frame" x="223" y="76" width="97" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -57,7 +57,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0EH-3z-0w5">
-                                <rect key="frame" x="20" y="110" width="280" height="309"/>
+                                <rect key="frame" x="20" y="110" width="280" height="397"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
@@ -85,37 +85,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1227" y="-197"/>
-        </scene>
-        <!--History View Controller - History-->
-        <scene sceneID="9bS-yr-YE3">
-            <objects>
-                <viewController id="Ta8-VI-L4v" customClass="HistoryViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="yby-hA-U7C"/>
-                        <viewControllerLayoutGuide type="bottom" id="Ymh-n5-Hcf"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="dt3-HR-wnu">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dle-4j-7iO">
-                                <rect key="frame" x="0.0" y="67" width="320" height="413"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="History" id="mjb-yb-ZmR"/>
-                    <connections>
-                        <outlet property="historyView" destination="dle-4j-7iO" id="p2b-Nu-B8G"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="P0j-5P-DaO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1767" y="127"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="fik-5B-8H1">
@@ -146,23 +115,23 @@
                         <viewControllerLayoutGuide type="bottom" id="gvu-b1-pyB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="cAW-H1-zAX">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ans-Dk-u7f">
-                                <rect key="frame" x="20" y="135" width="280" height="287"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ans-Dk-u7f">
+                                <rect key="frame" x="7" y="133" width="305" height="383"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score:0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEw-hz-nQQ">
-                                <rect key="frame" x="216" y="74" width="97" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 000000" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEw-hz-nQQ">
+                                <rect key="frame" x="232" y="74" width="80" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P79-Xl-zV8">
-                                <rect key="frame" x="20" y="74" width="77" height="19"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P79-Xl-zV8">
+                                <rect key="frame" x="7" y="74" width="75" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -175,10 +144,13 @@
                                     <action selector="startNewGame" destination="vXZ-lx-hvc" eventType="touchUpInside" id="mut-zy-Ndh"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6zC-Zp-twr">
-                                <rect key="frame" x="123" y="76" width="73" height="17"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6zC-Zp-twr">
+                                <rect key="frame" x="122" y="76" width="75" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="17" id="Q0h-PK-BTc"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <state key="normal" title="End Game">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -188,10 +160,13 @@
                                     <action selector="endCurrentGame:" destination="Coh-Hy-xqh" eventType="touchUpInside" id="BYf-9d-lQR"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kkx-N0-F1G">
-                                <rect key="frame" x="159" y="103" width="141" height="22"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kkx-N0-F1G">
+                                <rect key="frame" x="171" y="103" width="141" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="141" id="RHm-16-zqW"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <state key="normal" title="Deal 3 more cards">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -203,11 +178,32 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="P79-Xl-zV8" firstAttribute="leading" secondItem="ans-Dk-u7f" secondAttribute="leading" id="5Y6-4Z-mO4"/>
+                            <constraint firstItem="6zC-Zp-twr" firstAttribute="centerX" secondItem="cAW-H1-zAX" secondAttribute="centerX" id="Dmm-xT-Sto"/>
+                            <constraint firstItem="P79-Xl-zV8" firstAttribute="width" secondItem="6zC-Zp-twr" secondAttribute="width" id="DtM-NY-nUM"/>
+                            <constraint firstItem="P79-Xl-zV8" firstAttribute="top" secondItem="pEw-hz-nQQ" secondAttribute="top" id="KII-zp-Rgs"/>
+                            <constraint firstItem="6zC-Zp-twr" firstAttribute="centerX" secondItem="ans-Dk-u7f" secondAttribute="centerX" id="RD1-r5-eOI"/>
+                            <constraint firstItem="pEw-hz-nQQ" firstAttribute="trailing" secondItem="kkx-N0-F1G" secondAttribute="trailing" id="S3u-cf-wgj"/>
+                            <constraint firstItem="kkx-N0-F1G" firstAttribute="trailing" secondItem="ans-Dk-u7f" secondAttribute="trailing" id="UHt-YS-zwl"/>
+                            <constraint firstItem="P79-Xl-zV8" firstAttribute="top" secondItem="Xkf-if-zPz" secondAttribute="bottom" constant="10" id="VHB-YD-04N"/>
+                            <constraint firstItem="pEw-hz-nQQ" firstAttribute="leading" secondItem="6zC-Zp-twr" secondAttribute="trailing" constant="35" id="X71-5q-019"/>
+                            <constraint firstItem="kkx-N0-F1G" firstAttribute="top" secondItem="6zC-Zp-twr" secondAttribute="bottom" constant="10" id="Y5y-KZ-LhN"/>
+                            <constraint firstItem="6zC-Zp-twr" firstAttribute="leading" secondItem="P79-Xl-zV8" secondAttribute="trailing" constant="40" id="aDs-Y9-ZUT"/>
+                            <constraint firstItem="ans-Dk-u7f" firstAttribute="top" secondItem="P79-Xl-zV8" secondAttribute="bottom" constant="40" id="dF6-qk-o1j"/>
+                            <constraint firstItem="ans-Dk-u7f" firstAttribute="top" secondItem="kkx-N0-F1G" secondAttribute="bottom" constant="8" symbolic="YES" id="heU-aV-4l0"/>
+                            <constraint firstItem="kkx-N0-F1G" firstAttribute="top" secondItem="pEw-hz-nQQ" secondAttribute="bottom" constant="8" symbolic="YES" id="mzj-9n-HX4"/>
+                            <constraint firstItem="pEw-hz-nQQ" firstAttribute="centerY" secondItem="6zC-Zp-twr" secondAttribute="centerY" id="ni1-fB-SpU"/>
+                            <constraint firstItem="gvu-b1-pyB" firstAttribute="top" secondItem="ans-Dk-u7f" secondAttribute="bottom" constant="20" symbolic="YES" id="qFU-qd-Qkn"/>
+                            <constraint firstItem="P79-Xl-zV8" firstAttribute="leading" secondItem="cAW-H1-zAX" secondAttribute="leading" constant="7" id="xXG-As-gUt"/>
+                            <constraint firstItem="6zC-Zp-twr" firstAttribute="bottom" secondItem="P79-Xl-zV8" secondAttribute="bottom" id="zHo-nZ-pGU"/>
+                        </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Set Card Game" id="06E-st-pyg"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="dealMoreCardsButton" destination="kkx-N0-F1G" id="M4z-f6-oPy"/>
                         <outlet property="gameCardsView" destination="ans-Dk-u7f" id="hfM-Lb-liq"/>
                         <outlet property="scoreLabel" destination="pEw-hz-nQQ" id="EQi-ou-D70"/>
                     </connections>
@@ -259,7 +255,7 @@
             <objects>
                 <tableViewController id="9yi-l8-lKq" customClass="HighScoresViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="I2T-3m-NfD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="431"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -313,7 +309,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bPg-NN-Qyg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1227" y="986"/>
+            <point key="canvasLocation" x="1227" y="1056"/>
         </scene>
         <!--Navigation Controller - High Scores-->
         <scene sceneID="SrG-Mr-YEr">
@@ -332,7 +328,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v1Y-Ai-Y18" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="713" y="986"/>
+            <point key="canvasLocation" x="714" y="1056"/>
         </scene>
     </scenes>
     <resources>
@@ -341,6 +337,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>

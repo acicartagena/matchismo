@@ -21,9 +21,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
     self.cardCount =SET_CARD_GAME_INIT_COUNT;
-    [self game];
     [self createGameWithCardCount:self.cardCount];
 }
 
@@ -34,6 +38,13 @@
 }
 
 #pragma mark - 
+
+- (void)createGameWithCardCount:(NSInteger)cardCount
+{
+    [super createGameWithCardCount:cardCount];
+    self.dealMoreCardsButton.enabled = YES;
+    self.dealMoreCardsButton.hidden = NO;
+}
 - (Deck *)createDeck{
     return [[SetCardDeck alloc] init];
 }
@@ -90,10 +101,17 @@
 
 - (IBAction)dealThreeMoreCards:(id)sender
 {
-    if (self.cardViews.count == 81){
-        return;
-    }
     [self drawNewCards:3];
+}
+
+- (void)drawNewCards:(NSInteger)numberOfCards
+{
+    [super drawNewCards:numberOfCards];
+    
+    if (self.cardViews.count == 81){
+        self.dealMoreCardsButton.enabled = NO;
+        self.dealMoreCardsButton.hidden = YES;
+    }
 }
 
 @end

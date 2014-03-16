@@ -24,8 +24,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.cardCount = PLAYING_CARD_COUNT;
-    [self game];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    self.cardCount =PLAYING_CARD_COUNT;
     [self createGameWithCardCount:self.cardCount];
 }
 
