@@ -18,23 +18,16 @@
 
 #pragma mark - lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-}
-
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.cardCount =SET_CARD_GAME_INIT_COUNT;
-    [self createGameWithCardCount:self.cardCount];
-}
-
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    [self setGameType:GAME_TYPE_SET];
-    
+    if (self.setupNewGame){
+        self.cardCount =SET_CARD_GAME_INIT_COUNT;
+        self.gameType = GAME_TYPE_SET;
+        [self createGameWithCardCount:self.cardCount];
+    }else{
+        [self layoutCardViews];
+    }
 }
 
 #pragma mark - 
@@ -42,6 +35,7 @@
 - (void)createGameWithCardCount:(NSInteger)cardCount
 {
     [super createGameWithCardCount:cardCount];
+    
     self.dealMoreCardsButton.enabled = YES;
     self.dealMoreCardsButton.hidden = NO;
 }
@@ -83,35 +77,21 @@
         }
     }
     [self performSelector:@selector(updateCardsView) withObject:self afterDelay:0.5f];
-
 }
 
-- (void)updateCardsView
+- (void)drawNewCards:(NSInteger)numberOfCards
 {
-    self.waitingForAnimationFinish = NO;
-    for (CardView *cardView in self.cardViews){
-        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
-        Card *card = [self.game cardAtIndex:cardViewIndex];
-        if (card == self.activeCard && !card.isMatched){
-            self.activeCard.chosen = NO;
-        }
-        [self updateView:cardView forCard:card defaultEnable:YES];
+    [super drawNewCards:numberOfCards];
+
+    if (self.cardViews.count == [SetCardDeck totalNumberOfCards]){
+        self.dealMoreCardsButton.enabled = NO;
+        self.dealMoreCardsButton.hidden = YES;
     }
 }
 
 - (IBAction)dealThreeMoreCards:(id)sender
 {
     [self drawNewCards:3];
-}
-
-- (void)drawNewCards:(NSInteger)numberOfCards
-{
-    [super drawNewCards:numberOfCards];
-    
-    if (self.cardViews.count == 81){
-        self.dealMoreCardsButton.enabled = NO;
-        self.dealMoreCardsButton.hidden = YES;
-    }
 }
 
 @end

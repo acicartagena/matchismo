@@ -11,7 +11,13 @@
 
 @implementation SetCardDeck
 
-- (instancetype)init{
++ (NSInteger)totalNumberOfCards
+{
+    return 81;
+}
+
+- (instancetype)init
+{
     self = [super init];
     if (self){
         for (NSNumber *symbol in [SetCard validSymbols]){

@@ -35,7 +35,7 @@
 
 @interface ViewController : UIViewController <CardViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *gameCardsView;
+@property (weak, nonatomic) IBOutlet UIView *gameCardsView;//card views container
 
 @property (strong, nonatomic) NSString *gameType;
 @property (strong, nonatomic) CardMatchingGame *game;
@@ -45,6 +45,7 @@
 
 @property (nonatomic) BOOL waitingForAnimationFinish;
 @property (nonatomic) NSInteger cardCount;
+@property (nonatomic) BOOL setupNewGame;
 
 
 - (Deck *)createDeck;

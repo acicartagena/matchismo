@@ -55,13 +55,15 @@
     return _contentsDictionary;
 }
 
-- (void)setRank:(NSUInteger)rank{
+- (void)setRank:(NSUInteger)rank
+{
     if (rank<= [SetCard maxRank]){
         _rank = rank;
     }
 }
 
-- (int)match:(NSArray *)otherCards{
+- (int)match:(NSArray *)otherCards
+{
     int score = 0;
     int partial =0;
     
@@ -90,7 +92,8 @@
     return score;
 }
 
--(int) checkProperty:(NSString*)property OfCards:(NSArray*)otherCards forSameValue:(BOOL)isSame{
+-(int) checkProperty:(NSString*)property OfCards:(NSArray*)otherCards forSameValue:(BOOL)isSame
+{
     
     int score = 0;
 

@@ -13,6 +13,8 @@
 
 @property (nonatomic) NSUInteger numberOfCardsMatchMode;
 
++ (NSInteger)totalNumberOfCards;
+
 -(void)addCard:(Card *)card atTop:(BOOL) atTop;
 -(void)addCard:(Card *)card;
 -(Card*)drawRandomCard;

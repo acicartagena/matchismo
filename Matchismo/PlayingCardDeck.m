@@ -11,7 +11,13 @@
 
 @implementation PlayingCardDeck
 
--(instancetype)init{
++ (NSInteger)totalNumberOfCards
+{
+    return 52;
+}
+
+-(instancetype)init
+{
     self = [super init];
     if (self){
         for (NSString *suit in [PlayingCard validSuits]){

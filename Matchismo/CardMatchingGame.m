@@ -75,11 +75,7 @@ static const int COST_TO_CHOOSE = 1;
     }
     //toggle
     if (card.isChosen){
-        card.chosen = NO;
-        if ([self.chosenCards containsObject:card]){
-            [self.chosenCards removeObject:card];
-        }
-        self.matchStatus = MatchStatusTypeNoCardSelected;
+        [self toggleCard:card];
         return;
     }
 
@@ -97,32 +93,53 @@ static const int COST_TO_CHOOSE = 1;
         self.matchScore = [card match:self.chosenCards];
         
         if (self.matchScore){
-            self.matchScore *=(self.numberOfCardsMatchMode == 2 ? 4:2);
-            self.score += self.matchScore ;
-            
-            //set all cards to be matched
-            for (Card *card in [self chosenCards]){
-                card.matched = YES;
-            }
-            card.matched = YES;
-            
-            //clean up array of chosen cards
-            self.chosenCards = nil;
-            self.matchStatus = MatchStatusTypeMatchFound;
+            [self matchFoundForCard:card];
         }else{
-            self.score -= MISMATCH_PENALTY;
-            
-            //set all previous/other cards to not chosen
-            for (Card *card in [self chosenCards]){
-                card.chosen = NO;
-            }
-            
-            //clean up array of chosen cards
-            self.chosenCards = nil;
-            self.matchStatus = MatchStatusTypeMatchNotFound;
+            [self matchNotFoundForCard:card];
         }
         card.chosen = YES;
     }
+}
+
+- (void)toggleCard:(Card *)card
+{
+    card.chosen = NO;
+    if ([self.chosenCards containsObject:card]){
+        [self.chosenCards removeObject:card];
+    }
+    self.matchStatus = MatchStatusTypeNoCardSelected;
+
+}
+
+- (void)matchFoundForCard:(Card *)card
+{
+    self.matchScore *=(self.numberOfCardsMatchMode == 2 ? 4:2);
+    self.score += self.matchScore ;
+    
+    //set all cards to be matched
+    for (Card *card in [self chosenCards]){
+        card.matched = YES;
+    }
+    card.matched = YES;
+    
+    //clean up array of chosen cards
+    self.chosenCards = nil;
+    self.matchStatus = MatchStatusTypeMatchFound;
+    
+}
+
+- (void)matchNotFoundForCard:(Card *)card
+{
+    self.score -= MISMATCH_PENALTY;
+    
+    //set all previous/other cards to not chosen
+    for (Card *card in [self chosenCards]){
+        card.chosen = NO;
+    }
+    
+    //clean up array of chosen cards
+    self.chosenCards = nil;
+    self.matchStatus = MatchStatusTypeMatchNotFound;
 }
 
 - (NSTimeInterval)endGame

@@ -9,31 +9,36 @@
 #import "PlayingCard.h"
 
 @interface PlayingCard ()
-+(NSArray *)rankStrings;
++ (NSArray *)rankStrings;
 @end
 
 @implementation PlayingCard
 
 @synthesize suit = _suit;//synthesize when both setter & getter are provided
 
-+(NSArray *)validSuits{
++ (NSArray *)validSuits
+{
     return @[@"♥",@"♦",@"♠",@"♣"];
 }
 
-+(NSArray *)rankStrings{
++ (NSArray *)rankStrings
+{
     return @[@"?",@"A",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"10",@"J",@"Q",@"K"];
 }
 
-+(NSUInteger)maxRank{
++(NSUInteger)maxRank
+{
     return [[self rankStrings] count] -1;
 }
 
--(NSString *)contents{
+-(NSString *)contents
+{
     NSArray *rankStrings = [PlayingCard rankStrings];
     return [rankStrings[self.rank] stringByAppendingString:self.suit];
 }
 
--(int)match:(NSArray *)otherCards{
+-(int)match:(NSArray *)otherCards
+{
     int score = 0;
     
     //compare card against other cards
@@ -54,17 +59,20 @@
 }
 
 
--(NSString *) suit{
+-(NSString *) suit
+{
     return _suit ? _suit:@"?";
 }
 
--(void)setSuit:(NSString*)suit{
+-(void)setSuit:(NSString*)suit
+{
     if ([[PlayingCard validSuits] containsObject:suit]){
         _suit = suit;
     }
 }
 
--(void)setRank:(NSUInteger)rank{
+-(void)setRank:(NSUInteger)rank
+{
     if (rank<= [PlayingCard maxRank]){
         _rank = rank;
     }

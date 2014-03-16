@@ -21,7 +21,7 @@
 @property (nonatomic, getter = isGameAlreadySaved) BOOL gameAlreadySaved;
 @property (strong, nonatomic) NSString *gameName;
 @property (nonatomic) NSTimeInterval gameTime;
-@property (nonatomic) BOOL setupNewGame;
+
 
 @end
 
@@ -32,6 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.setupNewGame = YES;
 }
 
 - (void)viewDidLayoutSubviews
@@ -49,24 +50,26 @@
     self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
     self.grid.minimumNumberOfCells = self.cardCount;
     
-    NSPredicate *inPlayCardsPredicate = [NSPredicate predicateWithFormat:@"self.inPlay == YES"];
-    NSArray *cardsInPlay = [self.cardViews filteredArrayUsingPredicate:inPlayCardsPredicate];
+    [self layoutCardViews];
     
-    int x = 0;
-    for (int i=0; i<self.grid.rowCount; i++){
-        for (int j=0; j<self.grid.columnCount; j++){
-            x +=1;
-            if (x> self.cardCount){
-                break;
-            }
-            CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-            [cardsInPlay[x-1] setFrame:frame];
-            
-        }
-        if (x> self.cardCount){
-            break;
-        }
-    }
+//    NSPredicate *inPlayCardsPredicate = [NSPredicate predicateWithFormat:@"self.inPlay == YES"];
+//    NSArray *cardsInPlay = [self.cardViews filteredArrayUsingPredicate:inPlayCardsPredicate];
+//    
+//    int x = 0;
+//    for (int i=0; i<self.grid.rowCount; i++){
+//        for (int j=0; j<self.grid.columnCount; j++){
+//            x +=1;
+//            if (x> self.cardCount){
+//                break;
+//            }
+//            CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
+//            [cardsInPlay[x-1] setFrame:frame];
+//            
+//        }
+//        if (x> self.cardCount){
+//            break;
+//        }
+//    }
 }
 
 #pragma mark - lazy loading
@@ -95,7 +98,7 @@
     return _grid;
 }
 
-#pragma mark - Game Control
+#pragma mark - Setup Game
 
 - (void)createGameWithCardCount:(NSInteger)cardCount
 {
@@ -122,9 +125,9 @@
         
         //draw card
         Card *card = [self.game drawNewCard];
-       
-        [self updateView:cardView forCard:card defaultEnable:YES];
-        
+
+//        [self updateView:cardView forCard:card defaultEnable:YES];
+        [cardView setCard:card defaultEnable:YES];
         [self.gameCardsView addSubview:cardView];
     }
     
@@ -167,9 +170,10 @@
     }
 }
 
+#pragma mark - Game States
+
 - (IBAction)startNewGame
 {
-    
     void (^tapBlock)(UIAlertView *alertView, NSInteger buttonIndex)=^void(UIAlertView *alertView, NSInteger buttonIndex){
         
         if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
@@ -182,6 +186,7 @@
             
             //reset game
             self.game = nil;
+            self.setupNewGame = YES;
             [self game];
             [self createGameWithCardCount:self.cardCount];
             
@@ -214,6 +219,16 @@
     }
 }
 
+- (void)updateUINewGame
+{
+    int i=0;
+    for (CardView *cardView in self.cardViews){
+        Card  *card = [self.game cardAtIndex:i++];
+//        [cardView setCard:card defaultEnable:NO];
+        [self updateView:cardView forCard:card defaultEnable:NO];
+    }
+}
+
 - (IBAction)endCurrentGame:(id)sender
 {
     [UIAlertView showWithTitle:@"End Game"
@@ -234,7 +249,6 @@
 
 - (void)saveGameStatistics
 {
-    
     if (self.isGameAlreadySaved){
         return;
     }
@@ -257,7 +271,7 @@
     [defaults setObject:data forKey:SAVE_KEY];
 }
 
-#pragma mark - Game View
+#pragma mark - Game Control
 - (void)cardSelected:(id)sender
 {
     if (self.isGameEnded){
@@ -276,7 +290,8 @@
     }
     
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    [self updateView:(CardView *)sender forCard:self.activeCard defaultEnable:YES];
+//    [self updateView:(CardView *)sender forCard:self.activeCard defaultEnable:YES];
+    [(CardView *)sender setCard:self.activeCard defaultEnable:YES];
     
     switch (self.game.matchStatus) {
         case MatchStatusTypeMatchFound:
@@ -298,14 +313,22 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
 }
 
-- (void)updateUINewGame
+- (void)updateCardsView
 {
-    int i=0;
+    self.waitingForAnimationFinish = NO;
+    
     for (CardView *cardView in self.cardViews){
-        Card  *card = [self.game cardAtIndex:i++];
-        [self updateView:cardView forCard:card defaultEnable:NO];
+        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
+        Card *card = [self.game cardAtIndex:cardViewIndex];
+        if (card == self.activeCard && !card.isMatched){
+            self.activeCard.chosen = NO;
+        }
+        [cardView setCard:card defaultEnable:NO];
+        //[self updateView:cardView forCard:card defaultEnable:NO];
     }
+    self.activeCard = nil;
 }
+
 
 #pragma mark - methods to be overwritten
 
@@ -317,11 +340,6 @@
 - (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame
 {
     return nil;
-}
-
-- (void)updateCardsView
-{
-    return;
 }
 
 
