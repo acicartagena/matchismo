@@ -46,7 +46,7 @@
 @property (nonatomic) BOOL waitingForAnimationFinish;
 @property (nonatomic) NSInteger cardCount;
 @property (nonatomic) BOOL setupNewGame;
-
+@property (nonatomic) BOOL cardsInPile;
 
 - (Deck *)createDeck;
 - (void)createGameWithCardCount:(NSInteger)cardCount;

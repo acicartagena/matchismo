@@ -21,7 +21,7 @@
 @property (strong, nonatomic) NSString *gameName;
 @property (nonatomic) NSTimeInterval gameTime;
 
-@property (nonatomic) BOOL cardsInPile;
+
 @property (nonatomic) CGPoint cardPileAnchorPoint;
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 
@@ -45,7 +45,6 @@
     self.grid.size = self.gameCardsView.frame.size;
     self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
 }
-
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {

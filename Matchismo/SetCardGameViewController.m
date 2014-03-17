@@ -21,12 +21,16 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
+    self.cardCount =SET_CARD_GAME_INIT_COUNT;
+    self.gameType = GAME_TYPE_SET;
+    
     if (self.setupNewGame){
-        self.cardCount =SET_CARD_GAME_INIT_COUNT;
-        self.gameType = GAME_TYPE_SET;
         [self createGameWithCardCount:self.cardCount];
     }else{
-        [self layoutCardViews];
+        if (!self.cardsInPile){
+            [self layoutCardViews];
+        }
     }
 }
 
