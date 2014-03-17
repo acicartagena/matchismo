@@ -10,79 +10,247 @@
 #import "UIAlertView+Blocks.h"
 #import "HistoryViewController.h"
 
-
-
-
+#import "PlayingCardView.h"
+#import "PlayingCard.h"
 @interface ViewController ()
-//@property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
-//@property (nonatomic) int flipCount;
-//@property (strong,nonatomic) Deck *deck;
 
-
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons; //contain all UIButtons in random order
-
-@property (strong, readwrite, nonatomic) CardMatchingGame *game;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-//@property (weak, nonatomic) IBOutlet UISegmentedControl *cardMatchModeSegControl;
-
-
-
-@property (strong, readwrite, nonatomic) NSMutableArray *gameHistory;
-@property (strong, readwrite, nonatomic) NSMutableSet *indexOfMatchedCards;
-//@property (weak, nonatomic) IBOutlet UISlider *gameHistorySlider;
-
-@property (nonatomic) BOOL browseHistory;
 
 @property (nonatomic, getter = isGameEnded) BOOL gameEnded;
 @property (nonatomic, getter = isGameAlreadySaved) BOOL gameAlreadySaved;
-@property (nonatomic, strong) NSString *gameName;
+@property (strong, nonatomic) NSString *gameName;
 @property (nonatomic) NSTimeInterval gameTime;
 
--(void) updateMatchStatusType;
+
+@property (nonatomic) CGPoint cardPileAnchorPoint;
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+
 
 @end
 
 @implementation ViewController
 
--(void) viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    NSLog(@"vc view did appear");
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updateMatchStatusType)
-                                                 name:MatchStatusTypeChangedNotification
-                                               object:nil];
+#pragma mark - lifecyle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.setupNewGame = YES;
+    [self setupGestureRecognizers];
 }
 
--(void) viewDidDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:MatchStatusTypeChangedNotification
-                                                  object:nil];
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    self.grid.size = self.gameCardsView.frame.size;
+    self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
 }
 
--(CardMatchingGame *)game{
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    
+    self.grid.size = self.gameCardsView.frame.size;
+    self.grid.cellAspectRatio = [CardView cardViewDefaultAspectRatio];
+    self.grid.minimumNumberOfCells = self.cardCount;
+    
+    [self layoutCardViews];
+    
+}
+
+#pragma mark - lazy loading
+
+- (CardMatchingGame *)game
+{
     if (!_game){
-        _game = [[CardMatchingGame alloc] initWithCardCount:[[self cardButtons] count] usingDeck:[self createDeck]];
+        _game = [[CardMatchingGame alloc] initWithDeck:[self createDeck]];
     }
     return _game;
 }
 
--(Deck *)createDeck{
-//    return [[PlayingCardDeck alloc] init];
-    return nil;
+- (NSMutableArray *)cardViews
+{
+    if (!_cardViews){
+        _cardViews = [[NSMutableArray alloc] init];
+    }
+    return _cardViews;
 }
 
--(NSMutableSet *) indexOfMatchedCards{
-    if (!_indexOfMatchedCards) _indexOfMatchedCards = [[NSMutableSet alloc] init];
-    return _indexOfMatchedCards;
+- (Grid *)grid
+{
+    if (!_grid){
+        _grid = [[Grid alloc] init];
+    }
+    return _grid;
 }
 
--(NSMutableArray *) gameHistory{
-    if (!_gameHistory) _gameHistory = [[NSMutableArray alloc] init];
-    return _gameHistory;
+- (UIDynamicAnimator *)animator
+{
+    if (!_animator){
+        _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.gameCardsView];
+    }
+    return _animator;
 }
 
-- (IBAction)startNewGame {
+#pragma mark - View Gesture Recognizers
+
+- (void)setupGestureRecognizers
+{
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    tap.numberOfTapsRequired = 1;
+    tap.numberOfTouchesRequired = 1;
+    tap.cancelsTouchesInView = NO;
     
+    pinch.delegate = self;
+    pan.delegate = self;
+    tap.delegate = self;
+    
+    [self.gameCardsView addGestureRecognizer:pinch];
+    [self.gameCardsView addGestureRecognizer:tap];
+    [self.gameCardsView addGestureRecognizer:pan];
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gesture
+{
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan:
+            self.cardsInPile = YES;
+            self.cardPileAnchorPoint = CGPointMake(self.gameCardsView.frame.origin.x + self.gameCardsView.frame.size.width*0.5f, self.gameCardsView.frame.origin.y + self.gameCardsView.frame.size.height*0.5f);
+            
+            for (CardView *cardView in self.cardViews){
+                UIAttachmentBehavior *attachment = [[UIAttachmentBehavior alloc] initWithItem:cardView attachedToAnchor:self.cardPileAnchorPoint];
+                [self.animator addBehavior:attachment];
+            }
+            gesture.scale = 1;
+            break;
+        case UIGestureRecognizerStateChanged:
+            if (gesture.scale > 1){
+                gesture.scale = 1;
+                return;
+            }
+            for (UIDynamicBehavior *behavior in self.animator.behaviors){
+                if ([behavior isKindOfClass:[UIAttachmentBehavior class]]){
+                    UIAttachmentBehavior *attachment = (UIAttachmentBehavior *)behavior;
+                    attachment.length *= gesture.scale;
+                }
+            }
+            gesture.scale = 1;
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)pan:(UIPanGestureRecognizer *)gesture
+{
+    CGPoint newAnchorPoint = [gesture locationInView:self.gameCardsView];
+    for (UIDynamicBehavior *behavior in [self.animator.behaviors reverseObjectEnumerator]){
+        if ([behavior isKindOfClass:[UIAttachmentBehavior class]]){
+            UIAttachmentBehavior *attachment = (UIAttachmentBehavior *)behavior;
+            attachment.anchorPoint = newAnchorPoint;
+        }
+    }
+}
+
+- (void)tap:(UITapGestureRecognizer *)tap
+{
+    [self.animator removeAllBehaviors];
+    [self layoutCardViews];
+    self.cardsInPile = NO;
+    self.animator = nil;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+        if (!self.cardsInPile){
+            return NO;
+        }
+    }
+    return YES;
+}
+
+#pragma mark - Setup Game
+
+- (void)createGameWithCardCount:(NSInteger)cardCount
+{
+    if ([self.cardViews count]>0){
+        [self.cardViews removeAllObjects];
+    }
+    if ([[self.gameCardsView subviews] count]>0){
+        for (UIView *cardView in [self.gameCardsView subviews]){
+            [cardView removeFromSuperview];
+        }
+    }
+    self.setupNewGame = YES;
+    [self drawNewCards:cardCount];
+    self.setupNewGame = NO;
+}
+
+- (void)drawNewCards:(NSInteger)numberOfCards
+{
+    CGRect tempFrame = [self.grid frameOfCellAtRow:0 inColumn:0];
+    NSInteger index = [self.cardViews count];
+    for (int i =0; i<numberOfCards; i++) {
+        //create card views
+        CardView *cardView = [self cardViewForCardAtIndex:index++ Frame:tempFrame];
+        
+        //draw card
+        Card *card = [self.game drawNewCard];
+
+//        [self updateView:cardView forCard:card defaultEnable:YES];
+        [cardView setCard:card defaultEnable:YES];
+        [self.gameCardsView addSubview:cardView];
+    }
+    
+    [self layoutCardViews];
+}
+
+- (void)layoutCardViews
+{
+    int x = 0;
+    NSPredicate *inPlayCardsPredicate = [NSPredicate predicateWithFormat:@"self.inPlay == YES"];
+    NSArray *cardsInPlay = [self.cardViews filteredArrayUsingPredicate:inPlayCardsPredicate];
+    NSInteger cardCount = cardsInPlay.count;
+    self.grid.minimumNumberOfCells = cardCount;
+    
+    for (int i=0; i<self.grid.rowCount; i++){
+        for (int j=0; j<self.grid.columnCount; j++){
+            x +=1;
+            if (x> cardCount){
+                break;
+            }
+            CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
+            CardView *cardView = cardsInPlay[x-1];
+            
+            CGFloat delay = 0;
+            if (self.setupNewGame){
+                delay = x*0.2f;
+            }
+            
+            CGFloat duration = 1.0f;
+            if (self.cardsInPile){
+                duration = 0.25f;
+            }
+            
+            [UIView animateWithDuration:duration delay:delay options:0 animations:^{
+                cardView.frame = frame;
+            } completion:^(BOOL finished) {
+                [self.gameCardsView sendSubviewToBack:cardView];
+                [cardView setNeedsDisplay];
+            }];
+            
+        }
+        if (x> cardCount){
+            break;
+        }
+    }
+}
+
+#pragma mark - Game Controls
+
+- (IBAction)startNewGame
+{
     void (^tapBlock)(UIAlertView *alertView, NSInteger buttonIndex)=^void(UIAlertView *alertView, NSInteger buttonIndex){
         
         if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_OK_BUTTON]){
@@ -94,30 +262,22 @@
             [self saveGameStatistics];
             
             //reset game
-            _game = nil;
+            self.game = nil;
+            self.setupNewGame = YES;
+            [self game];
+            [self createGameWithCardCount:self.cardCount];
             
             //start new game
-            [self updateUI];
+            [self updateUINewGame];
             [self setGameAlreadySaved:NO];
             [self setGameEnded:NO];
             
-            //enable segmented control
-            //                              [[self cardMatchModeSegControl] setEnabled:YES];
-            //                              [[self cardMatchModeSegControl] setSelectedSegmentIndex:0];
-            //reset score label
             self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
-            
-            //reset game history
-            self.gameHistory = nil;
-            self.indexOfMatchedCards = nil;
-            
-            //                              [self.gameHistorySlider setMaximumValue:0.0f];
-            //                              [self.gameHistorySlider setValue:0.0f];
         }
     };
     
     NSString *title = @"New Game";
-    NSString *message = @"this will start a NEW game?";
+    NSString *message = @"this will END current game and start a NEW game?";
     NSString *placholder = @"enter your name.";
     
     if (self.isGameAlreadySaved){
@@ -136,8 +296,18 @@
     }
 }
 
-- (IBAction)endCurrentGame:(id)sender {
-    
+- (void)updateUINewGame
+{
+    int i=0;
+    for (CardView *cardView in self.cardViews){
+        Card  *card = [self.game cardAtIndex:i++];
+//        [cardView setCard:card defaultEnable:NO];
+        [self updateView:cardView forCard:card defaultEnable:NO];
+    }
+}
+
+- (IBAction)endCurrentGame:(id)sender
+{
     [UIAlertView showWithTitle:@"End Game"
                        message:@"This will end your current game?"
           textFieldPlaceholder:@"Enter your name."
@@ -154,11 +324,12 @@
                       }];
 }
 
-- (void)saveGameStatistics{
-    
+- (void)saveGameStatistics
+{
     if (self.isGameAlreadySaved){
         return;
     }
+    
     [self setGameAlreadySaved:YES];
     self.gameTime = [self.game endGame];
     
@@ -174,200 +345,79 @@
     }else{
         [data addObject:gameData];
     }
-    
     [defaults setObject:data forKey:SAVE_KEY];
-    
 }
 
-
-- (IBAction)cardMatchModeUpdate:(id)sender {
-    NSInteger selectedSeg = [(UISegmentedControl*)sender selectedSegmentIndex];
-    switch (selectedSeg) {
-        case TWO_CARD_MATCH_MODE_INDEX:
-            self.game.numberOfCardsMatchMode = 2;
-            break;
-        case THREE_CARD_MATCH_MODE_INDEX:
-            self.game.numberOfCardsMatchMode = 3;
-            break;
-    }
-}
-
-- (IBAction)touchCardButton:(UIButton *)sender {
-    
-    if (self.isGameEnded)
+#pragma mark - Game Play
+- (void)cardSelected:(id)sender
+{
+    if (self.isGameEnded || self.waitingForAnimationFinish){
         return;
+    }
     
-//    [[self cardMatchModeSegControl] setEnabled:NO];
+    if (self.cardsInPile){
+        [self tap:nil];
+        return;
+    }
     
-    NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
+    NSUInteger chosenButtonIndex = [self.cardViews indexOfObject:sender];
+    self.activeCard =[self.game cardAtIndex:chosenButtonIndex];
+    
+    if (self.activeCard.matched){
+        return;
+    }
+    
     [self.game chooseCardAtIndex:chosenButtonIndex];
-    [self updateUI];
-    
-    //update game history
-    [self updateGameHistoryWithChosenCard:chosenButtonIndex];
-
-}
-
--(void) updateGameHistoryWithChosenCard:(NSUInteger) chosenButtonIndex{
-    NSLog(@"status label text:%@",self.statusLabel.text);
-    NSLog(@"status label attributed text:%@",self.statusLabel.attributedText);
-    if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
-        [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.text?self.statusLabel.text:self.statusLabel.attributedText, SCORE_KEY:@(self.game.score)}];
-        //        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
-    }
-    //    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
-}
-
--(void) updateUI{
-    //NSLog(@"update ui");
-    for (UIButton *cardButton in self.cardButtons){
-        NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
-        Card *card = [self.game cardAtIndex:cardButtonIndex];
-        NSString *title = [self titleForCard:card];
-        [cardButton setTitle:title forState:UIControlStateNormal];
-        [cardButton setAttributedTitle:[self attributedTitleForCard:card] forState:UIControlStateNormal];
-        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
-        cardButton.enabled = !card.isMatched;
-        
-        //add current index to array of matched cards index
-        if (card.isMatched){
-            [self.indexOfMatchedCards addObject:@(cardButtonIndex)];
-        }
-    }
-    
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
-    [self updateMatchStatusType];
-}
-
--(NSAttributedString *) attributedTitleForCard:(Card *)card{
-    return nil;
-}
-
--(NSString *) titleForCard:(Card *)card{
-    NSString *title = card.isChosen ? card.contents : @"";
-    return title;
-}
-
--(UIImage *) backgroundImageForCard:(Card *)card{
-    return [UIImage imageNamed:card.isChosen ? @"cardFront" : @"cardBack"];
-}
-
--(void) updateMatchStatusType{
+//    [self updateView:(CardView *)sender forCard:self.activeCard defaultEnable:YES];
+    [(CardView *)sender setCard:self.activeCard defaultEnable:YES];
     
     switch (self.game.matchStatus) {
-            
-        case MatchStatusTypePreviouslyMatched:
+        case MatchStatusTypeMatchFound:
+        case MatchStatusTypeMatchNotFound:
+            [self updateUIMatchDone];
             break;
-            
-        case MatchStatusTypeNoCardSelected:{
-            self.statusLabel.text = @"";
-            self.statusLabel.attributedText = [[NSAttributedString alloc] init];
-            break;
-        }
-            
-        case MatchStatusTypeNotEnoughMoves:{
-            self.statusLabel.text = @"";
-            for (Card *card in self.game.chosenCards){
-                if (card.contents){
-                    self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@, ",card.contents];
-                }
-                if (card.contentsDictionary){
-                    NSMutableAttributedString *mutableAttrString = [self.statusLabel.attributedText mutableCopy];
-                    [mutableAttrString appendAttributedString:[self attributedTitleForCard:card]];
-                    [mutableAttrString appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
-                    self.statusLabel.attributedText = mutableAttrString;
-                }
-            }
-            break;
-        }
-            
-        case MatchStatusTypeMatchFound:{
-            if (self.game.currentCard.contents){
-                self.statusLabel.text = [self.statusLabel.text
-                                     stringByAppendingFormat:@" %@ match! for %li point(s)",[self.game.currentCard contents], (long)self.game.matchScore];
-            }
-            if (self.game.currentCard.contentsDictionary){
-                 NSMutableAttributedString *mutableAttrString = [self.statusLabel.attributedText mutableCopy];
-                [mutableAttrString appendAttributedString:[self attributedTitleForCard:self.game.currentCard]];
-                [mutableAttrString appendAttributedString:[[NSAttributedString alloc]
-                                                           initWithString:[NSString stringWithFormat:@" match! for %li point(s)",(long)self.game.matchScore]]];
-                self.statusLabel.attributedText = mutableAttrString;
-            }
-            break;
-        }
-            
-        case MatchStatusTypeMatchNotFound:{
-            if (self.game.currentCard.contents){
-                self.statusLabel.text = [self.statusLabel.text stringByAppendingFormat:@" %@ doesn't match! %i point penalty!",
-                                     [self.game.currentCard contents], MISMATCH_PENALTY];
-            }
-            
-            if (self.game.currentCard.contentsDictionary){
-                NSMutableAttributedString *mutableAttrString = [self.statusLabel.attributedText mutableCopy];
-                [mutableAttrString appendAttributedString:[self attributedTitleForCard:self.game.currentCard]];
-                [mutableAttrString appendAttributedString:[[NSAttributedString alloc]
-                                                           initWithString:[NSString stringWithFormat:@" doesn't match! %i point penalty!",MISMATCH_PENALTY]]];
-                self.statusLabel.attributedText = mutableAttrString;
-            }
-            break;
-        }
-            
         default:
             break;
     }
 }
 
-
-- (IBAction)viewGameHistory:(id)sender {
-    if ([self.gameHistory count] == 0){
-        return;
-    }
-    
-    int value = (int)[(UISlider*)sender value];
-//    NSLog(@"chosen card:%@",self.gameHistory[value][CHOSEN_CARD_KEY]);
-//    NSLog(@"status:%@",self.gameHistory[value][STATUS_KEY]);
-//    NSString *x = @"matched card:";
-//    for (NSNumber *y in self.gameHistory[value][MATCHED_CARDS_KEY]){
-//        x=[x stringByAppendingFormat:@" %@,",y];
-//    }
-//    NSLog(x);
-    [(UISlider*)sender setValue:(float)value];
-    [self updateUIWithHistory:(NSDictionary*)self.gameHistory[value]];
+- (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable
+{
+    [cardView setCard:card defaultEnable:defaultEnable];
 }
 
--(void) updateUIWithHistory:(NSDictionary*) historyData{
-    //set matched cards, reset other cards
-    for (UIButton *cardButton in self.cardButtons){
-        NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
-        
-        if ([(NSArray*)historyData[MATCHED_CARDS_KEY] containsObject:@(cardButtonIndex)]){
-            [cardButton setTitle:[self.game cardAtIndex:cardButtonIndex].contents forState:UIControlStateNormal];
-            [cardButton setBackgroundImage:[UIImage imageNamed:@"cardFront"] forState:UIControlStateNormal];
-            cardButton.enabled = NO;
-        }
-        else{
-            [cardButton setBackgroundImage:[UIImage imageNamed:@"cardBack"] forState:UIControlStateNormal];
-            [cardButton setTitle:@"" forState:UIControlStateNormal];
-            cardButton.enabled = YES;
-        }
-    }
-    
-    //set chosen cards
-    UIButton *cardButton = self.cardButtons[[(NSNumber*)historyData[CHOSEN_CARD_KEY] integerValue]];
-    [cardButton setTitle:[self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]].contents forState:UIControlStateNormal];
-    [cardButton setBackgroundImage:[UIImage imageNamed:@"cardFront"] forState:UIControlStateNormal];
-    cardButton.enabled = YES;
-    
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %li",(long)[(NSNumber*)historyData[SCORE_KEY] integerValue]];
-    self.statusLabel.text = historyData[STATUS_KEY];
-    
+- (void)updateUIMatchDone
+{
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %i",(int)self.game.score];
 }
 
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
-    if ([segue.identifier isEqualToString:@"setToHistory"]|| [segue.identifier isEqualToString:@"playingToHistory"] ) {
-        HistoryViewController *vc = (HistoryViewController *)segue.destinationViewController;
-        [vc setHistory:self.gameHistory];
+- (void)updateCardsView
+{
+    self.waitingForAnimationFinish = NO;
+    
+    for (CardView *cardView in self.cardViews){
+        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
+        Card *card = [self.game cardAtIndex:cardViewIndex];
+        if (card == self.activeCard && !card.isMatched){
+            self.activeCard.chosen = NO;
+        }
+        [cardView setCard:card defaultEnable:NO];
+        //[self updateView:cardView forCard:card defaultEnable:NO];
     }
+    self.activeCard = nil;
+}
+
+
+#pragma mark - methods to be overwritten
+
+- (Deck *)createDeck
+{
+    return nil;
+}
+
+- (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame
+{
+    return nil;
 }
 
 

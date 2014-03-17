@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Deck.h"
 #import "CardMatchingGame.h"
+#import "CardView.h"
+#import "Grid.h"
 
 #define ALERT_OK_BUTTON @"ok"
 #define ALERT_CANCEL_BUTTON @"nope"
@@ -31,17 +33,30 @@
 
 #define SAVE_KEY @"scoreData"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <CardViewDelegate, UIGestureRecognizerDelegate>
 
-@property (strong, readonly, nonatomic) CardMatchingGame *game;
-@property (strong, readonly, nonatomic) NSMutableArray *gameHistory;
-@property (strong, readonly, nonatomic) NSMutableSet *indexOfMatchedCards;
-@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+@property (weak, nonatomic) IBOutlet UIView *gameCardsView;//card views container
+
 @property (strong, nonatomic) NSString *gameType;
+@property (strong, nonatomic) CardMatchingGame *game;
+@property (strong, nonatomic) NSMutableArray *cardViews;
+@property (strong, nonatomic) Grid *grid;
+@property (strong, nonatomic) Card *activeCard;
 
+@property (nonatomic) BOOL waitingForAnimationFinish;
+@property (nonatomic) NSInteger cardCount;
+@property (nonatomic) BOOL setupNewGame;
+@property (nonatomic) BOOL cardsInPile;
 
--(Deck *)createDeck;//abstract method for subclassing
--(void) updateUI;
+- (Deck *)createDeck;
+- (void)createGameWithCardCount:(NSInteger)cardCount;
+- (void)drawNewCards:(NSInteger)numberOfCards;
+- (void)layoutCardViews;
+- (void)updateUINewGame;
+- (void)updateUIMatchDone;
+- (void)updateCardsView;
+- (void)updateView:(CardView *)cardView forCard:(Card *)card defaultEnable:(BOOL)defaultEnable;
+- (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame;
 
 
 @end

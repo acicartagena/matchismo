@@ -10,4 +10,7 @@
 
 @interface SetCardGameViewController : ViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *dealMoreCardsButton;
+
+
 @end

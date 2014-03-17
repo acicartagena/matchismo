@@ -16,13 +16,20 @@
 
 @implementation Deck
 
--(NSMutableArray*)cards{
++ (NSInteger)totalNumberOfCards
+{
+    return 0;
+}
+
+- (NSMutableArray *)cards
+{
     if (!_cards) _cards = [[NSMutableArray alloc] init];//lazy initialization
     return _cards;
 
 }
 
--(void)addCard:(Card *)card atTop:(BOOL)atTop{
+- (void)addCard:(Card *)card atTop:(BOOL)atTop
+{
     if (atTop){
         [self.cards insertObject:card atIndex:0];
     }else{
@@ -30,11 +37,13 @@
     }
 }
 
--(void)addCard:(Card *)card{
+- (void)addCard:(Card *)card
+{
     [self addCard:card atTop:NO];
 }
 
--(Card*) drawRandomCard{
+- (Card *) drawRandomCard
+{
     Card *randomCard = nil;
     
     //make sure array is not empty before calling object at index (index out of bounds)
@@ -46,4 +55,7 @@
     
     return randomCard;
 }
+
+
+
 @end

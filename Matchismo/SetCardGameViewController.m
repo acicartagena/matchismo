@@ -10,88 +10,92 @@
 #import "SetCardDeck.h"
 #import "CardMatchingGame.h"
 #import "SetCard.h"
-#import "Card.h"
+#import "SetCardView.h"
 
-@interface SetCardGameViewController ()
-
-@end
+#define SET_CARD_GAME_INIT_COUNT 12
 
 @implementation SetCardGameViewController
 
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    [self updateUI];
-    [self setGameType:GAME_TYPE_SET];
+#pragma mark - lifecycle
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
     
+    self.cardCount =SET_CARD_GAME_INIT_COUNT;
+    self.gameType = GAME_TYPE_SET;
+    
+    if (self.setupNewGame){
+        [self createGameWithCardCount:self.cardCount];
+    }else{
+        if (!self.cardsInPile){
+            [self layoutCardViews];
+        }
+    }
 }
 
--(Deck*) createDeck{
+#pragma mark - 
+
+- (void)createGameWithCardCount:(NSInteger)cardCount
+{
+    [super createGameWithCardCount:cardCount];
+    
+    self.dealMoreCardsButton.enabled = YES;
+    self.dealMoreCardsButton.hidden = NO;
+}
+- (Deck *)createDeck{
     return [[SetCardDeck alloc] init];
+}
+
+- (CardView *)cardViewForCardAtIndex:(NSInteger)index Frame:(CGRect)frame
+{
+    SetCardView *cardView =[[SetCardView alloc] initWithFrame:CGRectMake(160.0f - frame.size.width*0.5f, 600.0f - frame.size.height*0.5f, frame.size.width, frame.size.height)];
+    cardView.delegate = self;
+    [self.cardViews addObject:cardView];
     
+    return cardView;
 }
 
-
--(UIImage *) backgroundImageForCard:(Card *)card{
-    //NSLog(@"card is chosen: %i ui image: %@",card.isChosen, temp);
-    return [UIImage imageNamed:card.isChosen ? @"matchedSetCard" : @"cardFront"];
-}
-
--(NSAttributedString *) attributedTitleForCard:(Card *)card{
-    NSMutableAttributedString *temp;
-    SetCard *setCard = (SetCard*)card;
-    if (card.contentsDictionary){
-        NSString *stringTemp = @"";
-        for (int i=1;i<=setCard.rank;i++){
-            stringTemp = [stringTemp stringByAppendingString:[NSString stringWithFormat:@"%@ ",setCard.symbol]];
-        }
-        temp = [[NSMutableAttributedString alloc] initWithString:stringTemp];
-        
-        if (setCard.shading == SetCardShadingOpen){
-            [temp addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, stringTemp.length)];
-            
-            [temp addAttribute:NSStrokeWidthAttributeName value:@-4 range:NSMakeRange(0, stringTemp.length)];
-            if ([setCard.color isEqualToString:RED_COLOR]){
-                [temp addAttribute:NSStrokeColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, stringTemp.length)];
-            }else if ([setCard.color isEqualToString:GREEN_COLOR]){
-                [temp addAttribute:NSStrokeColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, stringTemp.length)];
-            }else if ([setCard.color isEqualToString:PURPLE_COLOR]){
-                [temp addAttribute:NSStrokeColorAttributeName value:[UIColor purpleColor] range:NSMakeRange(0, stringTemp.length)];
-            }
-        }
-        else if (setCard.shading == SetCardShadingStriped){
-            NSLog(@"stripe:%@",[setCard contents]);
-            if ([setCard.color isEqualToString:RED_COLOR]){
-                [temp addAttribute:NSForegroundColorAttributeName value:[[UIColor redColor] colorWithAlphaComponent:0.3f] range:NSMakeRange(0, stringTemp.length)];
-            }else if ([setCard.color isEqualToString:GREEN_COLOR]){
-                [temp addAttribute:NSForegroundColorAttributeName value:[[UIColor greenColor] colorWithAlphaComponent:0.3f] range:NSMakeRange(0, stringTemp.length)];
-            }else if ([setCard.color isEqualToString:PURPLE_COLOR]){
-                [temp addAttribute:NSForegroundColorAttributeName value:[[UIColor purpleColor] colorWithAlphaComponent:0.3f] range:NSMakeRange(0, stringTemp.length)];
-            }
-            
-        }
-        else{
-            
-            if ([setCard.color isEqualToString:RED_COLOR]){
-                [temp addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, stringTemp.length)];
-            }else if ([setCard.color isEqualToString:GREEN_COLOR]){
-                [temp addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(0, stringTemp.length)];
-            }else if ([setCard.color isEqualToString:PURPLE_COLOR]){
-                [temp addAttribute:NSForegroundColorAttributeName value:[UIColor purpleColor] range:NSMakeRange(0, stringTemp.length)];
-            }
+- (void)updateUIMatchDone
+{
+    [super updateUIMatchDone];
+    
+    self.waitingForAnimationFinish = YES;
+    int cardsMatchCount = 0;
+    
+    for (CardView *cardView in self.cardViews){
+        NSUInteger cardViewIndex = [self.cardViews indexOfObject:cardView];
+        SetCard *card = (SetCard *)[self.game cardAtIndex:cardViewIndex];
+        if (card.isMatched && cardView.inPlay){
+            cardsMatchCount += 1;
+            cardView.inPlay = NO;
+            [UIView animateWithDuration:1.5f delay:0.5f options:0 animations:^{
+                cardView.frame = CGRectMake(160.0f - cardView.frame.size.width*0.5f, 600.0f - cardView.frame.size.height*0.5f, cardView.frame.size.width, cardView.frame.size.height);
+            } completion:^(BOOL finished) {
+                cardView.hidden = YES;
+                if (cardsMatchCount == 3){
+                    self.waitingForAnimationFinish = NO;
+                    [self drawNewCards:3];
+                }
+            }];
         }
     }
-    return temp;
+    [self performSelector:@selector(updateCardsView) withObject:self afterDelay:0.5f];
 }
 
--(void) updateGameHistoryWithChosenCard:(NSUInteger) chosenButtonIndex{
-    NSLog(@"status label text:%@",self.statusLabel.text);
-    NSLog(@"status label attributed text:%@",self.statusLabel.attributedText);
-    if (self.game.matchStatus != MatchStatusTypePreviouslyMatched){
-        [self.gameHistory addObject:@{CHOSEN_CARD_KEY:@(chosenButtonIndex),MATCHED_CARDS_KEY:[self.indexOfMatchedCards copy],STATUS_KEY:self.statusLabel.attributedText, SCORE_KEY:@(self.game.score)}];
-        //        [self.gameHistorySlider setMaximumValue:(float) [self.gameHistory count]-1];
+- (void)drawNewCards:(NSInteger)numberOfCards
+{
+    [super drawNewCards:numberOfCards];
+
+    if (self.cardViews.count == [SetCardDeck totalNumberOfCards]){
+        self.dealMoreCardsButton.enabled = NO;
+        self.dealMoreCardsButton.hidden = YES;
     }
-    //    [self.gameHistorySlider setValue:[self.gameHistorySlider maximumValue]];
 }
 
+- (IBAction)dealThreeMoreCards:(id)sender
+{
+    [self drawNewCards:3];
+}
 
 @end
