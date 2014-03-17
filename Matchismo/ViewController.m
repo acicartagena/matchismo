@@ -12,7 +12,6 @@
 
 #import "PlayingCardView.h"
 #import "PlayingCard.h"
-
 @interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
@@ -21,7 +20,10 @@
 @property (nonatomic, getter = isGameAlreadySaved) BOOL gameAlreadySaved;
 @property (strong, nonatomic) NSString *gameName;
 @property (nonatomic) NSTimeInterval gameTime;
+
 @property (nonatomic) BOOL cardsInPile;
+@property (nonatomic) CGPoint cardPileAnchorPoint;
+@property (strong, nonatomic) UIDynamicAnimator *animator;
 
 
 @end
@@ -54,24 +56,6 @@
     
     [self layoutCardViews];
     
-//    NSPredicate *inPlayCardsPredicate = [NSPredicate predicateWithFormat:@"self.inPlay == YES"];
-//    NSArray *cardsInPlay = [self.cardViews filteredArrayUsingPredicate:inPlayCardsPredicate];
-//    
-//    int x = 0;
-//    for (int i=0; i<self.grid.rowCount; i++){
-//        for (int j=0; j<self.grid.columnCount; j++){
-//            x +=1;
-//            if (x> self.cardCount){
-//                break;
-//            }
-//            CGRect frame =[self.grid frameOfCellAtRow:i inColumn:j];
-//            [cardsInPlay[x-1] setFrame:frame];
-//            
-//        }
-//        if (x> self.cardCount){
-//            break;
-//        }
-//    }
 }
 
 #pragma mark - lazy loading
@@ -100,6 +84,14 @@
     return _grid;
 }
 
+- (UIDynamicAnimator *)animator
+{
+    if (!_animator){
+        _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.gameCardsView];
+    }
+    return _animator;
+}
+
 #pragma mark - View Gesture Recognizers
 
 - (void)setupGestureRecognizers
@@ -122,23 +114,64 @@
 
 - (void)pinch:(UIPinchGestureRecognizer *)gesture
 {
-//    gesture.view.transform = CGAffineTransformScale(gesture.view.transform, gesture.scale, gesture.scale);
-//    gesture.scale = 1;
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan:
+            self.cardsInPile = YES;
+            self.cardPileAnchorPoint = CGPointMake(self.gameCardsView.frame.origin.x + self.gameCardsView.frame.size.width*0.5f, self.gameCardsView.frame.origin.y + self.gameCardsView.frame.size.height*0.5f);
+            
+            for (CardView *cardView in self.cardViews){
+                UIAttachmentBehavior *attachment = [[UIAttachmentBehavior alloc] initWithItem:cardView attachedToAnchor:self.cardPileAnchorPoint];
+                [self.animator addBehavior:attachment];
+            }
+            gesture.scale = 1;
+            break;
+        case UIGestureRecognizerStateChanged:
+            if (gesture.scale > 1){
+                gesture.scale = 1;
+                return;
+            }
+            for (UIDynamicBehavior *behavior in self.animator.behaviors){
+                if ([behavior isKindOfClass:[UIAttachmentBehavior class]]){
+                    UIAttachmentBehavior *attachment = (UIAttachmentBehavior *)behavior;
+                    attachment.length *= gesture.scale;
+                }
+            }
+            gesture.scale = 1;
+            break;
+        default:
+            break;
+    }
 }
 
-- (void)pan:(UIGestureRecognizer *)gesture
+- (void)pan:(UIPanGestureRecognizer *)gesture
 {
-    
+    CGPoint newAnchorPoint = [gesture locationInView:self.gameCardsView];
+    for (UIDynamicBehavior *behavior in [self.animator.behaviors reverseObjectEnumerator]){
+        if ([behavior isKindOfClass:[UIAttachmentBehavior class]]){
+            UIAttachmentBehavior *attachment = (UIAttachmentBehavior *)behavior;
+            attachment.anchorPoint = newAnchorPoint;
+        }
+    }
 }
 
-- (void)tap:(UIGestureRecognizer *)tap
+- (void)tap:(UITapGestureRecognizer *)tap
 {
-    
+    [self.animator removeAllBehaviors];
+    [self layoutCardViews];
+    self.cardsInPile = NO;
+    self.animator = nil;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] || [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
+        if (!self.cardsInPile){
+            return NO;
+        }
+    }
+    return YES;
 }
 
 #pragma mark - Setup Game
-
-
 
 - (void)createGameWithCardCount:(NSInteger)cardCount
 {
@@ -196,7 +229,12 @@
                 delay = x*0.2f;
             }
             
-            [UIView animateWithDuration:1.0f delay:delay options:0 animations:^{
+            CGFloat duration = 1.0f;
+            if (self.cardsInPile){
+                duration = 0.25f;
+            }
+            
+            [UIView animateWithDuration:duration delay:delay options:0 animations:^{
                 cardView.frame = frame;
             } completion:^(BOOL finished) {
                 [self.gameCardsView sendSubviewToBack:cardView];
@@ -314,11 +352,12 @@
 #pragma mark - Game Play
 - (void)cardSelected:(id)sender
 {
-    if (self.isGameEnded){
+    if (self.isGameEnded || self.waitingForAnimationFinish){
         return;
     }
     
-    if (self.waitingForAnimationFinish){
+    if (self.cardsInPile){
+        [self tap:nil];
         return;
     }
     

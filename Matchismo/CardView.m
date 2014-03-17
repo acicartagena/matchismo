@@ -10,8 +10,6 @@
 
 @implementation CardView
 
-
-
 + (CGFloat)cardViewDefaultAspectRatio
 {
     return DEFAULT_CARD_WIDTH/DEFAULT_CARD_HEIGHT;
